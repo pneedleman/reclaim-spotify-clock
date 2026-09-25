@@ -9,7 +9,7 @@ A distraction-free ESP32-S3 smart bedside clock built for kids and teens. Featur
 
 ## 🌟 Story & Overview
 
-Modern bedside gadgets fall into two extremes: cheap piezo screamers that cause morning fight-or-flight cortisol spikes, or big-tech smart screens (Echo Show, Nest Hub) with always-listening microphones sitting 3 feet from where your child sleeps.
+Modern bedside gadgets fall into two extremes: cheap plastic that jolt you out of bed, or big-tech smart screens (Echo Show, Nest Hub) with always-listening microphones sitting next to where your child sleeps.
 
 This project offers a **sane alternative**:
 - **Tactile Rotary Dial**: Turn to scroll screens or volume, tap to play/pause/snooze, double-tap to skip tracks.
