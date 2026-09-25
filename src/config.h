@@ -31,13 +31,6 @@
 #define HUE_BRIDGE_USERNAME SECRET_HUE_BRIDGE_USERNAME
 #define HUE_GROUP_ID        "1"
 
-// ==========================================
-// WMATA Bus Tracker Settings
-// ==========================================
-#define WMATA_DEFAULT_API_KEY SECRET_WMATA_DEFAULT_API_KEY
-#define WMATA_DEFAULT_STOP_ID ""
-#define WMATA_DEFAULT_ROUTE ""
-
 // Fallback lat/lon (used if ip-api geolocation fails)
 #define DEFAULT_LATITUDE  38.9959
 #define DEFAULT_LONGITUDE -77.0424

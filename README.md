@@ -1,6 +1,6 @@
 # ⏰ Reclaim Spotify Bedside Clock
 
-A distraction-free ESP32-S3 smart bedside clock built for kids and teens. Features physical rotary controls, Spotify Connect streaming, gradual sunrise lighting via Philips Hue, local weather, transit bus tracking, and school calendar sync—**with 100% zero microphones, cameras, or ad screens**.
+A distraction-free ESP32-S3 smart bedside clock built for kids and teens. Features physical rotary controls, Spotify Connect streaming, gradual sunrise lighting via Philips Hue, local weather, and school calendar sync—**with 100% zero microphones, cameras, or ad screens**.
 
 [![Reclaim The Day Project Page](https://img.shields.io/badge/Project_Story_%26_Parts_List-reclaimthe.day%2Fspotify--clock-D38865?style=for-the-badge)](https://reclaimthe.day/spotify-clock)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
@@ -106,7 +106,6 @@ Access the local web dashboard from any browser on your home network at `http://
 
 - **Live Alarm Configuration**: Adjust wake times, gradual volume ramp rates, and school calendar sync.
 - **Sunrise Simulation**: Configure Philips Hue bridge connection and light brightness curves.
-- **Voice Intercom**: Record instant 8kHz PCM voice memos from desktop Chrome or mobile Safari to play directly on the clock speaker.
 - **API Config Tab**: Update credentials wirelessly over Wi-Fi without re-flashing.
 
 ---
