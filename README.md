@@ -100,6 +100,15 @@ pio run -t uploadfs
 
 ---
 
+## 🔌 Optional Integrations
+
+The clock works out-of-the-box with just Wi-Fi & Spotify credentials. You can optionally enable these integrations in `src/secrets.h`:
+
+- **Philips Hue Sunrise Lighting**: Add your Hue Bridge IP and username to `SECRET_HUE_BRIDGE_USERNAME` to automatically fade up bedroom lights 15 minutes before wake time.
+- **Sinric Pro (Alexa Control)**: Add your Sinric Pro App Key & Switch ID to `SECRET_SINRICPRO_APP_KEY` if you want to toggle the clock or trigger alarms via Alexa routines.
+
+---
+
 ## 🌐 Zero-App Web Dashboard
 
 Access the local web dashboard from any browser on your home network at `http://spotify-alarm.local` (or via the clock's IP address):
