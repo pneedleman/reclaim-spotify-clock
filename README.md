@@ -11,6 +11,9 @@ A distraction-free ESP32-S3 smart bedside clock built for kids and teens. Featur
 
 ---
 
+[https://substackcdn.com/image/fetch/$s_!8DPp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F74166ac9-4332-4ac8-b34e-ea83268baedb_5354x3568.jpeg]
+---
+
 ## 🌟 Story & Overview
 
 Modern bedside gadgets fall into two extremes: cheap plastic that jolt you out of bed, or big-tech smart screens (Echo Show, Nest Hub) with always-listening microphones sitting next to where your child sleeps.
@@ -20,8 +23,8 @@ This project offers a **sane alternative**:
 - **Blue LCD (16x2)**: Retro-blue backlight that automatically dims at night. 
 - **Privacy by Design**:  No microphones or cameras.
 - **Hue Integration**: Slowly ramps up soft amber light on bedroom light before the alarm rings.
-- **Spotify: Connect to Spotify as a music controller and see the Artist and track scroll on the screen.
-- **Weather & Calendar: Displays Current and Upcoming Weather (+Alerts) and integrate custom ICS Calendars. 
+- **Spotify**:Connect to Spotify as a music controller and see the Artist and track scroll on the screen.
+- **Weather & Calendar**: Displays Current and Upcoming Weather (+Alerts) and integrate custom ICS Calendars. 
 - **School Calendar Aware**: Automatically suppresses alarms on teacher workdays, holidays, and snow delays.
 
 👉 **Read the full backstory, kitchen-table build photos, and full parts list at [reclaimthe.day/spotify-clock](https://reclaimthe.day/spotify-clock)**.
