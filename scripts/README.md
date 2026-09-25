@@ -1,36 +1,33 @@
-# 📅 School Calendar ICS Converter
+# 🛠️ Reclaim Bedside Clock Helper Scripts
 
-Convert any school district's `.ics` (iCalendar) feed into a lightweight `school_calendar.json` file for your Reclaim Bedside Clock.
+Helper tools for authorizing Spotify and converting school calendar feeds.
 
 ---
 
-## 🚀 Quick Start (1 Command)
+## 🔑 1. Spotify Refresh Token Generator (`get_spotify_refresh_token.py`)
 
-Run this Python script with your school district's `.ics` URL (or a local `.ics` file):
+Generate a long-lived `SECRET_SPOTIFY_REFRESH_TOKEN` for your clock in 30 seconds:
+
+1. Create a free Spotify Developer App at [developer.spotify.com](https://developer.spotify.com/dashboard).
+2. In your Spotify app settings, add `http://127.0.0.1:8888/callback` as a **Redirect URI**.
+3. Run the script with your Client ID and Client Secret:
+
+```bash
+python3 scripts/get_spotify_refresh_token.py <SPOTIFY_CLIENT_ID> <SPOTIFY_CLIENT_SECRET>
+```
+
+The script opens your browser to authorize your app, receives the code on `127.0.0.1:8888`, and prints your `SECRET_SPOTIFY_REFRESH_TOKEN` to paste into `src/secrets.h`!
+
+---
+
+## 📅 2. School Calendar ICS Converter (`ics_to_json.py`)
+
+Convert any school district's `.ics` (iCalendar) feed into a lightweight `school_calendar.json` file for your clock:
 
 ```bash
 python3 scripts/ics_to_json.py https://example-school.org/calendar.ics
 ```
 
-This generates `school_calendar.json` containing only the upcoming holidays, teacher workdays, and snow days.
-
----
-
-## 📲 How to Use the Generated File
-
-You have two choices:
-
-### Option A: Upload Directly to Clock (Offline Mode)
-Copy `school_calendar.json` into your `data/` folder and flash SPIFFS:
-```bash
-cp school_calendar.json data/
-pio run -t uploadfs
-```
-The clock will automatically use this local file to suppress alarms on days off—no internet required!
-
-### Option B: Host on GitHub (Automated Online Mode)
-Push `school_calendar.json` to a public GitHub repository and paste the raw URL into `SCHOOL_CALENDAR_JSON_URL` inside `src/config.h`:
-```cpp
-#define SCHOOL_CALENDAR_JSON_URL "https://raw.githubusercontent.com/your-username/my-clock-data/main/school_calendar.json"
-```
-The clock will periodically fetch updates over Wi-Fi!
+### How to Use the Generated File:
+- **Offline Mode**: Copy `school_calendar.json` into `data/` and run `pio run -t uploadfs`.
+- **Online Mode**: Push `school_calendar.json` to GitHub and set `SCHOOL_CALENDAR_JSON_URL` in `src/config.h`.
