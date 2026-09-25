@@ -77,8 +77,10 @@ cd reclaim-spotify-clock
 cp src/secrets.h.example src/secrets.h
 ```
 
-### 2. Enter Your Credentials in `src/secrets.h`
-Edit `src/secrets.h` with your local network and API tokens:
+### 2. Configure Your Settings (`src/secrets.h` & `src/config.h`)
+
+#### A. Private Credentials (`src/secrets.h`)
+Edit `src/secrets.h` with your Wi-Fi and Spotify API keys:
 ```cpp
 #define SECRET_WIFI_SSID "Your_Home_WiFi"
 #define SECRET_WIFI_PASSWORD "Your_WiFi_Password"
@@ -88,24 +90,35 @@ Edit `src/secrets.h` with your local network and API tokens:
 #define SECRET_SPOTIFY_REFRESH_TOKEN "your_spotify_refresh_token"
 ```
 
+#### B. Clock Settings (`src/config.h`)
+Edit `src/config.h` to set your target playback speaker, timezone, and optional calendar URL:
+```cpp
+// Target Spotify playback speaker name
+#define DEFAULT_SPOTIFY_DEVICE_NAME "Bedroom Echo"
+
+// Optional: Raw GitHub URL for school calendar JSON sync
+#define SCHOOL_CALENDAR_JSON_URL "https://raw.githubusercontent.com/your-user/your-repo/main/school_calendar.json"
+```
+
 ### 3. Build & Flash via PlatformIO
 Open the project folder in VSCode with PlatformIO installed, then build and flash:
 ```bash
 # Upload Firmware
 pio run -t upload
 
-# Upload SPIFFS Audio Assets
+# Upload SPIFFS Audio & Data Assets
 pio run -t uploadfs
 ```
 
 ---
 
-## 🔌 Optional Integrations
+## 🔌 Optional Integrations & School Calendar
 
-The clock works out-of-the-box with just Wi-Fi & Spotify credentials. You can optionally enable these integrations in `src/secrets.h`:
+The clock works out-of-the-box with just Wi-Fi & Spotify credentials. You can optionally enable these integrations:
 
-- **Philips Hue Sunrise Lighting**: Add your Hue Bridge IP and username to `SECRET_HUE_BRIDGE_USERNAME` to automatically fade up bedroom lights 15 minutes before wake time.
-- **Sinric Pro (Alexa Control)**: Add your Sinric Pro App Key & Switch ID to `SECRET_SINRICPRO_APP_KEY` if you want to toggle the clock or trigger alarms via Alexa routines.
+- **School District Calendar Auto-Suppress**: The clock automatically suppresses morning alarms on holidays and teacher workdays using `data/school_calendar.json`. To convert your school district's `.ics` link into a clock-ready JSON file, run our 1-line script: `python3 scripts/ics_to_json.py <YOUR_SCHOOL_ICS_URL>`. See [scripts/README.md](scripts/) for details.
+- **Philips Hue Sunrise Lighting**: Set `SECRET_HUE_BRIDGE_USERNAME` in `src/secrets.h` to automatically fade up bedroom lights 15 minutes before wake time.
+- **Sinric Pro (Alexa Control)**: Uncomment the optional Sinric Pro lines in `src/secrets.h` if you want to trigger clock alarms via Alexa routines.
 
 ---
 
