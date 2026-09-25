@@ -1,4 +1,4 @@
-# ⏰ Reclaim Spotify Bedside Clock
+# ⏰ Reclaim The Day - Spotify Alarm Clock
 
 A distraction-free ESP32-S3 smart bedside clock built for kids and teens. Features physical rotary controls, Spotify Connect streaming, gradual sunrise lighting via Philips Hue, local weather, and school calendar sync—**with 100% zero microphones, cameras, or ad screens**.
 
