@@ -54,7 +54,11 @@ void updateSchoolCalendar() {
     client.setInsecure();
     HTTPClient http;
     
-    if (!http.begin(client, DCPS_CALENDAR_JSON_URL)) {
+    if (String(SCHOOL_CALENDAR_JSON_URL).isEmpty()) {
+        Serial.println("[SchoolCalendar] No remote calendar URL defined. Skipping remote fetch.");
+        return;
+    }
+    if (!http.begin(client, SCHOOL_CALENDAR_JSON_URL)) {
         Serial.println("[School] Failed to begin HTTP connection.");
         return;
     }
