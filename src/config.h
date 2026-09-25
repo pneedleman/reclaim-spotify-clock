@@ -43,10 +43,10 @@
 #define DEFAULT_SPOTIFY_DEVICE_ID   ""
 
 // ==========================================
-// DCPS School Calendar JSON URL
-// Update this to your raw GitHub URL after enabling the GitHub Action
+// School Calendar JSON URL (Optional)
+// Set to your raw GitHub JSON URL to auto-suppress alarms on holidays/workdays
 // ==========================================
-#define DCPS_CALENDAR_JSON_URL "https://raw.githubusercontent.com/pneedleman/dcps_to_json/main/data/dcps_calendar.json"
+#define SCHOOL_CALENDAR_JSON_URL ""
 
 // ==========================================
 // NTP & Timezone Settings
