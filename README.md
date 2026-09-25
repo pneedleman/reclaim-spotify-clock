@@ -5,6 +5,10 @@ A distraction-free ESP32-S3 smart bedside clock built for kids and teens. Featur
 [![Reclaim The Day Project Page](https://img.shields.io/badge/Project_Story_%26_Parts_List-reclaimthe.day%2Fspotify--clock-D38865?style=for-the-badge)](https://reclaimthe.day/spotify-clock)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
+<p align="center">
+  <img src="https://substackcdn.com/image/fetch/$s_!8DPp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F74166ac9-4332-4ac8-b34e-ea83268baedb_5354x3568.jpeg" alt="Reclaim Spotify Bedside Clock" width="700" />
+</p>
+
 ---
 
 ## 🌟 Story & Overview
