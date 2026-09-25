@@ -7,7 +7,7 @@
 #include <time.h>
 
 #define GCAL_UPDATE_INTERVAL (30 * 60 * 1000) // 30 minutes
-static const char* DEFAULT_GCAL_URL = "https://home.needleputt.com/api/calendar/faye.ics";
+static const char* DEFAULT_GCAL_URL = "";
 
 static String gcalUrl = DEFAULT_GCAL_URL;
 static String gcalFilterKeyword = "";
@@ -26,16 +26,12 @@ static void loadGCalPreferences() {
     gcalEnabled = prefs.getBool("gcal_en", true);
     String savedUrl = prefs.getString("gcal_url", "");
     
-    // Auto-migrate from legacy Google Calendar URL to custom home.needleputt.com feed
-    if (savedUrl.indexOf("calendar.google.com") != -1 || savedUrl.length() < 15) {
-        gcalUrl = DEFAULT_GCAL_URL;
-        gcalFilterKeyword = "";
-        prefs.putString("gcal_url", gcalUrl);
-        prefs.putString("gcal_kw", "");
-        Serial.println("[GCal] Auto-migrated calendar URL to home.needleputt.com/api/calendar/faye.ics (keyword cleared).");
-    } else {
+    if (savedUrl.length() >= 15) {
         gcalUrl = savedUrl;
         gcalFilterKeyword = prefs.getString("gcal_kw", "");
+    } else {
+        gcalUrl = DEFAULT_GCAL_URL;
+        gcalFilterKeyword = "";
     }
     gcalLookaheadHours = prefs.getInt("gcal_lookahead", 168);
     if (gcalLookaheadHours < 24) gcalLookaheadHours = 168;
