@@ -13,9 +13,11 @@ Modern bedside gadgets fall into two extremes: cheap plastic that jolt you out o
 
 This project offers a **sane alternative**:
 - **Tactile Rotary Dial**: Turn to scroll screens or volume, tap to play/pause/snooze, double-tap to skip tracks.
-- **Gentle Blue LCD (16x2)**: Soft retro-blue backlight that automatically dims to a 1% night glow. Zero touchscreens or YouTube rabbit holes.
-- **100% Privacy by Design**: Physically zero microphones, zero camera lenses, and zero tracking chips.
-- **Sunrise Light Fade**: Slowly ramps up soft amber light on bedroom Philips Hue bulbs before the alarm rings.
+- **Blue LCD (16x2)**: Retro-blue backlight that automatically dims at night. 
+- **Privacy by Design**:  No microphones or cameras.
+- **Hue Integration**: Slowly ramps up soft amber light on bedroom light before the alarm rings.
+- **Spotify: Connect to Spotify as a music controller and see the Artist and track scroll on the screen.
+- **Weather & Calendar: Displays Current and Upcoming Weather (+Alerts) and integrate custom ICS Calendars. 
 - **School Calendar Aware**: Automatically suppresses alarms on teacher workdays, holidays, and snow delays.
 
 👉 **Read the full backstory, kitchen-table build photos, and full parts list at [reclaimthe.day/spotify-clock](https://reclaimthe.day/spotify-clock)**.
