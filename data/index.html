@@ -1,0 +1,3237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Smart Alarm - Settings Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-secondary: #8e9bb0;
+            --accent: #38bdf8; /* Electric Light Blue */
+            --accent-hover: #7dd3fc;
+            --glow: rgba(56, 189, 248, 0.15);
+            --danger: #ff4757;
+            --orange: #ff9f43;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(98, 0, 234, 0.08) 0px, transparent 50%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 30%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        .footer-guide-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 0.4rem 0.95rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            transition: all 0.2s ease;
+        }
+
+        .footer-guide-link:hover {
+            color: var(--accent);
+            border-color: rgba(56, 189, 248, 0.4);
+            background: rgba(56, 189, 248, 0.08);
+            transform: translateY(-1px);
+        }
+
+        main {
+            width: 100%;
+            max-width: 800px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(56, 189, 248, 0.25);
+            box-shadow: 0 12px 38px 0 rgba(0, 0, 0, 0.45);
+        }
+
+        .card-full {
+            grid-column: 1 / -1;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        input[type="text"], input[type="time"], input[type="date"], select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            color-scheme: dark;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus, input[type="time"]:focus, input[type="date"]:focus, select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+        }
+
+        /* Toggle switch */
+        .switch-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .switch-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .3s;
+            border-radius: 24px;
+            border: 1px solid var(--card-border);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Segmented Mode Control */
+        .segmented-control {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 1.2rem;
+        }
+
+        .segmented-btn {
+            flex: 1;
+            padding: 0.6rem 0.5rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .segmented-btn.active {
+            background: var(--accent);
+            color: black;
+            box-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            background: var(--accent);
+            color: #000000;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .voice-btn-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            align-items: stretch;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 520px) {
+            .voice-btn-grid {
+                grid-template-columns: 1fr;
+                gap: 0.6rem;
+            }
+        }
+
+        .voice-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            min-height: 72px;
+            height: 100%;
+            margin: 0;
+            padding: 0.75rem 0.5rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            font-family: inherit;
+            font-weight: 600;
+            line-height: 1.2;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            box-sizing: border-box;
+            appearance: none;
+            -webkit-appearance: none;
+            transition: all 0.2s ease;
+        }
+
+        .voice-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .voice-action:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .voice-action .voice-icon {
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+
+        .voice-record {
+            border-color: rgba(56, 189, 248, 0.25);
+        }
+
+        .voice-record:hover {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(14, 165, 233, 0.25) 100%);
+            border-color: rgba(56, 189, 248, 0.5);
+            color: #ffffff;
+        }
+
+        .voice-upload {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .voice-upload:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+        }
+
+        .voice-play {
+            border-color: rgba(129, 140, 248, 0.25);
+        }
+
+        .voice-play:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(79, 70, 229, 0.25) 100%);
+            border-color: rgba(129, 140, 248, 0.5);
+            color: #ffffff;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            line-height: 1.2;
+            transition: all 0.2s ease;
+        }
+        .status-badge.active-green {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #6ee7b7;
+        }
+        .status-badge.active-amber {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #fde68a;
+        }
+        .status-badge.active-blue {
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.4);
+            color: #7dd3fc;
+        }
+        .status-badge.active-purple {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: #e9d5ff;
+        }
+        .status-badge.active-sky {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #bae6fd;
+        }
+        .status-badge.active-orange {
+            background: rgba(249, 115, 22, 0.15);
+            border: 1px solid rgba(249, 115, 22, 0.4);
+            color: #fed7aa;
+        }
+        .status-badge.active-gold {
+            background: rgba(234, 179, 8, 0.15);
+            border: 1px solid rgba(234, 179, 8, 0.4);
+            color: #fef08a;
+        }
+        .status-badge.active-red {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+        .status-badge.muted {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Range Sliders */
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 4px;
+            outline: none;
+            transition: background 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.8);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 2px solid var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .range-value {
+            font-weight: 700;
+            min-width: 42px;
+            text-align: right;
+            color: var(--accent);
+            font-size: 0.95rem;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .track-info {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px dashed var(--accent);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Toast notifications */
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #38bdf8;
+            color: black;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        /* App Header & Hamburger Navigation */
+        .app-header {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-brand {
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .ver-badge {
+            font-size: 0.75rem;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 8px;
+            vertical-align: middle;
+            font-weight: 700;
+        }
+
+        .header-nav-control {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .current-tab-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: var(--accent);
+            padding: 0.6rem 1.1rem;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 10px rgba(56, 189, 248, 0.15);
+            font-family: inherit;
+        }
+
+        .current-tab-pill:hover {
+            background: rgba(56, 189, 248, 0.22);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .pill-chevron {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            transition: transform 0.2s ease;
+        }
+
+        .hamburger-btn {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+
+        .hamburger-btn:hover {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .hamburger-line {
+            width: 20px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 2px;
+            transition: all 0.25s ease;
+        }
+
+        /* Slide-Out Drawer & Backdrop */
+        .drawer-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1999;
+        }
+
+        .drawer-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .nav-drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 330px;
+            max-width: 86vw;
+            height: 100vh;
+            background: #0f172a;
+            border-left: 1px solid var(--card-border);
+            box-shadow: -8px 0 32px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 2000;
+            overflow: hidden;
+        }
+
+        .nav-drawer.active {
+            transform: translateX(0);
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.25rem 1rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .drawer-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .drawer-close-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .drawer-close-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        .drawer-menu {
+            flex: 1;
+            padding: 0.85rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            padding: 0.75rem 0.95rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid transparent;
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .drawer-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.12);
+            transform: translateX(2px);
+        }
+
+        .drawer-item.active {
+            background: rgba(56, 189, 248, 0.14);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 2px 12px rgba(56, 189, 248, 0.15);
+        }
+
+        .drawer-icon {
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+
+        .drawer-item-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer-item-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .drawer-item.active .drawer-item-title {
+            color: var(--accent);
+        }
+
+        .drawer-item-desc {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .drawer-chevron {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            opacity: 0.5;
+            transition: transform 0.2s ease;
+        }
+
+        .drawer-item:hover .drawer-chevron {
+            opacity: 1;
+            transform: translateX(2px);
+        }
+
+        .drawer-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .drawer-guide-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #38bdf8;
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .drawer-guide-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+        }
+
+        .tab-section {
+            display: none;
+            width: 100%;
+            grid-column: 1 / -1;
+        }
+
+        .tab-section.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            animation: fadeInTab 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeInTab {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .tab-section.active {
+                grid-template-columns: 1fr;
+            }
+            .header-brand {
+                text-align: center;
+            }
+            .header-content {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-brand">
+                <h1>⏰ Spotify Smart Alarm <span id="verBadge" class="ver-badge">v1.14</span></h1>
+                <p class="subtitle">Bedside Clock Settings & Parent Dashboard</p>
+            </div>
+            <div class="header-nav-control">
+                <button class="current-tab-pill" id="currentTabPill" onclick="toggleDrawer()" aria-label="Current section, tap to open menu">
+                    <span id="currentTabLabel">🌐 Status & Alerts</span>
+                    <span class="pill-chevron">▾</span>
+                </button>
+                <button class="hamburger-btn" id="drawerToggleBtn" onclick="toggleDrawer()" aria-label="Toggle navigation menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION DRAWER BACKDROP -->
+    <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+
+    <!-- SLIDE-OUT NAVIGATION DRAWER -->
+    <aside class="nav-drawer" id="navDrawer" aria-label="Main Navigation">
+        <div class="drawer-header">
+            <div class="drawer-title">
+                <span>🧭</span> Dashboard Navigation
+            </div>
+            <button class="drawer-close-btn" onclick="closeDrawer()" aria-label="Close navigation menu">✕</button>
+        </div>
+        <div class="drawer-menu">
+            <button class="drawer-item active" id="tab-btn-status" onclick="switchTab('status')">
+                <span class="drawer-icon">🌐</span>
+                <div class="drawer-item-text">
+                    <span class="drawer-item-title">Status & Alerts</span>
+                    <span class="drawer-item-desc">Live clock, weather & Wi-Fi</span>
+                </div>
+                <span class="drawer-chevron">›</span>
+            </button>
+            <button class="drawer-item" id="tab-btn-alarm" onclick="switchTab('alarm')">
+                <span class="drawer-icon">⏰</span>
+                <div class="drawer-item-text">
+                    <span class="drawer-item-title">Alarm & Gentle Wake</span>
+                    <span class="drawer-item-desc">Wake times, sounds & schedules</span>
+                </div>
+                <span class="drawer-chevron">›</span>
+            </button>
+            <button class="drawer-item" id="tab-btn-intercom" onclick="switchTab('intercom')">
+                <span class="drawer-icon">📢</span>
+                <div class="drawer-item-text">
+                    <span class="drawer-item-title">Parent Intercom</span>
+                    <span class="drawer-item-desc">Voice notes & morning broadcasts</span>
+                </div>
+                <span class="drawer-chevron">›</span>
+            </button>
+            <button class="drawer-item" id="tab-btn-bedtime" onclick="switchTab('bedtime')">
+                <span class="drawer-icon">🔊</span>
+                <div class="drawer-item-text">
+                    <span class="drawer-item-title">Audio & Sleep Timers</span>
+                    <span class="drawer-item-desc">White noise, volume & timers</span>
+                </div>
+                <span class="drawer-chevron">›</span>
+            </button>
+            <button class="drawer-item" id="tab-btn-lights" onclick="switchTab('lights')">
+                <span class="drawer-icon">🖥️</span>
+                <div class="drawer-item-text">
+                    <span class="drawer-item-title">Display & Philips Hue</span>
+                    <span class="drawer-item-desc">Auto-dimming & sunrise scenes</span>
+                </div>
+                <span class="drawer-chevron">›</span>
+            </button>
+            <button class="drawer-item" id="tab-btn-calendar" onclick="switchTab('calendar')">
+                <span class="drawer-icon">🗓️</span>
+                <div class="drawer-item-text">
+                    <span class="drawer-item-title">Calendars & Transit</span>
+                    <span class="drawer-item-desc">Google Calendar, DCPS & WMATA</span>
+                </div>
+                <span class="drawer-chevron">›</span>
+            </button>
+            <button class="drawer-item" id="tab-btn-api" onclick="switchTab('api')">
+                <span class="drawer-icon">🔑</span>
+                <div class="drawer-item-text">
+                    <span class="drawer-item-title">API & Integrations</span>
+                    <span class="drawer-item-desc">Spotify, OpenWeather & Hue</span>
+                </div>
+                <span class="drawer-chevron">›</span>
+            </button>
+            <button class="drawer-item" id="tab-btn-changelog" onclick="switchTab('changelog')">
+                <span class="drawer-icon">📝</span>
+                <div class="drawer-item-text">
+                    <span class="drawer-item-title">System Diagnostics</span>
+                    <span class="drawer-item-desc">Continuous uptime & changelog</span>
+                </div>
+                <span class="drawer-chevron">›</span>
+            </button>
+        </div>
+        <div class="drawer-footer">
+            <a href="/quick_start_guide.html" target="_blank" class="drawer-guide-btn">
+                <span>📖 Quick Start Guide</span>
+                <span>↗</span>
+            </a>
+        </div>
+    </aside>
+
+    <main>
+        <!-- TAB 1: STATUS & PRESETS -->
+        <div class="tab-section active" id="tab-status">
+            <!-- LIVE CLOCK STATUS CARD -->
+            <section class="card card-full" style="border: 1px solid rgba(56,189,248,0.3); background: rgba(56,189,248,0.06);">
+                <h2>🌐 Live Clock Status & Alerts</h2>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 0.5rem;">
+                    <div style="background:rgba(0,0,0,0.25); padding:0.85rem 1.1rem; border-radius:10px; border:1px solid var(--card-border);">
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.25rem;">🕒 Current Clock Time</span>
+                        <span id="liveClockTime" style="font-size:1.3rem; font-weight:700; color:var(--text-primary);">--:-- --</span>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.25); padding:0.85rem 1.1rem; border-radius:10px; border:1px solid var(--card-border);">
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.25rem;">📌 Clock State & Alerts</span>
+                        <span id="liveClockState" style="font-size:1.1rem; font-weight:700; color:var(--accent);">Idle Clock</span>
+                    </div>
+                </div>
+
+                <!-- LIVE WEATHER & ENVIRONMENTAL STATUS SUBSECTION -->
+                <div id="weatherStatusSubsection" style="margin-top: 1.1rem; border-top: 1px solid var(--card-border); padding-top: 0.85rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+                        <span style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">🌤️ Weather & Environmental Status</span>
+                        <span id="weatherSyncBadge" class="status-badge active" style="font-size:0.75rem; padding:0.2rem 0.5rem; cursor:pointer;" onclick="syncWeatherNow()">🔄 Sync Weather</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
+                        <div style="background:rgba(0,0,0,0.25); padding:0.7rem 0.9rem; border-radius:8px; border:1px solid var(--card-border);">
+                            <span style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.2rem;">🌡️ Current Conditions</span>
+                            <span id="liveWeatherCurrent" style="font-size:1.05rem; font-weight:700; color:var(--text-primary);">--°F</span>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.25); padding:0.7rem 0.9rem; border-radius:8px; border:1px solid var(--card-border);">
+                            <span id="liveWeatherHighLabel" style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.2rem;">📈 Forecast Temperatures</span>
+                            <span id="liveWeatherHigh" style="font-size:1.05rem; font-weight:700; color:var(--text-primary);">-- --° (Feels --°)</span>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.25); padding:0.7rem 0.9rem; border-radius:8px; border:1px solid var(--card-border);">
+                            <span style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.2rem;">☀️🌧️ Outdoor Elements</span>
+                            <span id="liveWeatherElements" style="font-size:1.05rem; font-weight:700; color:var(--text-primary);">--</span>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.25); padding:0.7rem 0.9rem; border-radius:8px; border:1px solid var(--card-border);">
+                            <span style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.2rem;">🚨 NOAA Weather Alerts</span>
+                            <span id="liveWeatherAlert" style="font-size:1.05rem; font-weight:700; color:var(--text-primary);">✓ No Active Warnings</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE CALENDAR & AGENDA STATUS SUBSECTION -->
+                <div id="calendarStatusSubsection" style="margin-top: 1.1rem; border-top: 1px solid var(--card-border); padding-top: 0.85rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+                        <span style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">🗓️ Calendar & Agenda Status</span>
+                        <span id="gcalSyncBadge" class="status-badge active" style="font-size:0.75rem; padding:0.2rem 0.5rem; cursor:pointer;" onclick="syncGCalNow()">🔄 Sync Calendar</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+                        <div style="background:rgba(0,0,0,0.25); padding:0.7rem 0.9rem; border-radius:8px; border:1px solid var(--card-border);">
+                            <span style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.2rem;">📅 Next Upcoming Event</span>
+                            <span id="liveGCalNextEvent" style="font-size:1.05rem; font-weight:700; color:var(--text-primary);">--</span>
+                        </div>
+                        <div style="background:rgba(0,0,0,0.25); padding:0.7rem 0.9rem; border-radius:8px; border:1px solid var(--card-border);">
+                            <span style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-bottom:0.2rem;">🎯 Active Filter Keyword</span>
+                            <span id="liveGCalKeyword" style="font-size:1.05rem; font-weight:700; color:var(--accent);">"Faye"</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACTIVE FEATURES & ENABLED SETTINGS BADGES -->
+                <div style="margin-top: 1.1rem; border-top: 1px solid var(--card-border); padding-top: 0.85rem;">
+                    <span style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); display:block; margin-bottom:0.6rem; text-transform:uppercase; letter-spacing:0.5px;">⚙️ Active Features & Enabled Settings</span>
+                    <div id="activeSettingsBadges" style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+                        <span class="status-badge muted">Loading active settings...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QUICK ACTIONS CARD -->
+            <section class="card card-full">
+                <h2>⚡ Quick Actions & Presets</h2>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+                    <button type="button" class="btn" onclick="triggerGoodNight()">🌙 "Good Night" Preset (30m Noise + Light Fade)</button>
+                    <button type="button" class="btn btn-secondary" onclick="testAlarm()">🧪 Test Alarm & Sunrise Light</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 2: ALARM SETUP -->
+        <div class="tab-section" id="tab-alarm">
+            <!-- ALARM CARD -->
+            <section class="card card-full">
+                <h2>⏰ Alarm Configuration</h2>
+                
+                <div class="switch-group">
+                    <span class="switch-label">Enable Alarm</span>
+                    <label class="switch">
+                        <input type="checkbox" id="alarmEnabled" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="alarmTime">Alarm Time</label>
+                    <input type="time" id="alarmTime" onchange="submitSettings()">
+                </div>
+
+                <div class="form-group">
+                    <label for="alarmRepeat">Repeat Mode</label>
+                    <select id="alarmRepeat" onchange="submitSettings()">
+                        <option value="0">Once</option>
+                        <option value="1">Everyday</option>
+                        <option value="2">Weekdays</option>
+                        <option value="3">Weekends</option>
+                        <option value="4">School Schedule (DCPS Calendar)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="alarmSound">Alarm Sound</label>
+                    <select id="alarmSound" onchange="submitSettings()">
+                        <option value="0">Premium Chime</option>
+                        <option value="1">Harp Triad</option>
+                        <option value="2">Zen Bowl</option>
+                        <option value="3">Melodic Pulse</option>
+                        <option value="4">Soft Alert</option>
+                        <option value="5">Bubble Sparkle</option>
+                        <option value="6">Kalimba</option>
+                        <option value="7">Lofi Beat</option>
+                        <option value="8">Retro Arcade</option>
+                        <option value="9">Dog Bark</option>
+                        <option value="10">Bird Chirps</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Alarm Volume</label>
+                    <div class="range-container">
+                        <input type="range" id="alarmVolume" min="0" max="21" oninput="updateRangeLabel('alarmVolumeVal', this.value)" onchange="submitSettings()">
+                        <span class="range-value" id="alarmVolumeVal">12</span>
+                    </div>
+                </div>
+
+                <div class="switch-group">
+                    <span class="switch-label">Gentle Wake Up (Sunrise)</span>
+                    <label class="switch">
+                        <input type="checkbox" id="gentleWake" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- MORNING AFFIRMATIONS -->
+            <section class="card card-full">
+                <h2>💬 Morning Affirmations</h2>
+                <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">One of these 15 messages is shown randomly when the alarm is dismissed. Keep each to 16 characters or less to fit the clock screen.</p>
+                <div id="affirmationsGrid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;"></div>
+                <button type="button" class="btn" onclick="submitAffirmations()">💾 Save Affirmations</button>
+            </section>
+        </div>
+
+        <!-- TAB 3: INTERCOM & VOICE MEMO -->
+        <div class="tab-section" id="tab-intercom">
+            <!-- PARENT VOICE INTERCOM CARD -->
+            <section class="card card-full">
+                <h2>🎙️ Parent Voice Intercom</h2>
+                <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">Send a live voice message to her clock speaker. Max 15 seconds.</p>
+
+                <div class="voice-btn-grid">
+                    <button id="voiceRecordBtn" type="button" class="voice-action voice-record" onclick="toggleVoiceRecording()">
+                        <span class="voice-icon">🎙️</span>
+                        <span>Start Live Mic</span>
+                    </button>
+                    <label for="mobileMicInput" class="voice-action voice-upload">
+                        <span class="voice-icon">📱</span>
+                        <span>Upload Memo</span>
+                    </label>
+                    <button type="button" class="voice-action voice-play" onclick="playVoiceMemo()">
+                        <span class="voice-icon">▶️</span>
+                        <span>Play Last Memo</span>
+                    </button>
+                    <input type="file" accept="audio/x-m4a,audio/mpeg,audio/wav,audio/mp3,.m4a,.mp3,.wav" id="mobileMicInput" style="display:none;" onchange="handleMobileVoiceUpload(this)">
+                </div>
+
+                <div id="voiceStatusBox" style="margin-top:0.75rem; padding:0.6rem; background:rgba(0,0,0,0.2); border-radius:8px; border:1px solid rgba(255,255,255,0.06); text-align:center; font-size:0.85rem; font-weight:600; color:var(--text-secondary);">
+                    Status: Ready to talk
+                </div>
+
+                <p style="font-size:0.75rem; color:var(--text-secondary); margin-top:0.8rem; text-align:center; line-height:1.4;">
+                    💡 <em>iOS: record in Voice Memos, then tap <strong>Upload Memo</strong> and pick the .m4a. Desktop: use <strong>Start Live Mic</strong>.</em>
+                </p>
+            </section>
+
+            <!-- COMBINED PARENT TEXT INTERCOM & REMINDERS CARD -->
+            <section class="card card-full">
+                <h2>📢 Parent Text Intercom & Reminders</h2>
+                <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">Send an instant text banner message to her screen or schedule a reminder for later.</p>
+
+                <!-- Mode Selector Bar -->
+                <div class="segmented-control">
+                    <button type="button" class="segmented-btn active" id="btnModeInstant" onclick="setIntercomMode('instant')">⚡ Send Now (Instant)</button>
+                    <button type="button" class="segmented-btn" id="btnModeScheduled" onclick="setIntercomMode('scheduled')">⏰ Schedule for Later</button>
+                </div>
+
+                <!-- INSTANT MODE PANEL -->
+                <div id="panelInstant">
+                    <div class="form-group">
+                        <label for="intercomText">Message Text (Max 32 chars):</label>
+                        <input type="text" id="intercomText" maxlength="32" placeholder="e.g. Dinner is ready!">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="intercomSound">Alert Sound:</label>
+                        <select id="intercomSound">
+                            <option value="silent">🔇 Silent (Text Only)</option>
+                            <option value="chime">🔔 Chime</option>
+                            <option value="chirp">🐦 Chirp</option>
+                            <option value="siren">🚨 Siren</option>
+                            <option value="buzzer">📳 Buzzer</option>
+                            <option value="fast_alert">⚠️ Fast Alert</option>
+                        </select>
+                    </div>
+
+                    <button type="button" class="btn" onclick="sendIntercomMessage()">📢 Send Text Message Now</button>
+                </div>
+
+                <!-- SCHEDULED MODE PANEL -->
+                <div id="panelScheduled" style="display:none;">
+                    <div class="switch-group">
+                        <span class="switch-label">Enable Scheduled Reminder</span>
+                        <label class="switch">
+                            <input type="checkbox" id="reminderEnabled" onchange="submitSettings()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reminderTime">Target Time:</label>
+                        <input type="time" id="reminderTime" onchange="submitSettings()">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reminderText">Reminder Text (Max 32 chars):</label>
+                        <input type="text" id="reminderText" maxlength="32" placeholder="e.g. Bring permission slip!" onchange="submitSettings()">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reminderSound">Alert Sound:</label>
+                        <select id="reminderSound" onchange="submitSettings()">
+                            <option value="silent">🔇 Silent (Text Only)</option>
+                            <option value="chime">🔔 Chime</option>
+                            <option value="chirp">🐦 Chirp</option>
+                            <option value="siren">🚨 Siren</option>
+                            <option value="buzzer">📳 Buzzer</option>
+                            <option value="fast_alert">⚠️ Fast Alert</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 4: AUDIO & SLEEP -->
+        <div class="tab-section" id="tab-bedtime">
+            <!-- BEDSIDE COUNTDOWN TIMER CARD (FULL WIDTH) -->
+            <section class="card card-full">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+                    <h2 style="margin:0;">⏱️ Bedside Countdown Timer</h2>
+                    <span id="liveTimerBadge" class="status-badge muted" style="font-size:0.75rem;">Inactive</span>
+                </div>
+                <p style="color:var(--text-secondary); margin-top:0.3rem; margin-bottom:0.8rem; font-size:0.85rem;">ADHD visual countdown timer with dynamic on-screen progress bar and siren alert sound.</p>
+                
+                <div style="background:rgba(0,0,0,0.25); padding:0.85rem 1.1rem; border-radius:10px; border:1px solid var(--card-border); margin:0.6rem 0 0.9rem 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.8rem;">
+                    <div>
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.2rem;">Remaining Time</span>
+                        <span id="liveTimerTime" style="font-size:1.6rem; font-weight:700; color:var(--accent);">--:--</span>
+                    </div>
+                    <div id="liveTimerActionButtons" style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-secondary" onclick="stopTimer()" style="padding:0.4rem 0.9rem; font-size:0.85rem; width:auto;">⏹️ Stop Timer</button>
+                        <button type="button" class="btn btn-secondary" onclick="testTimerSound()" style="padding:0.4rem 0.9rem; font-size:0.85rem; width:auto;">🧪 Test Siren Sound</button>
+                    </div>
+                </div>
+
+                <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; margin-bottom:0.8rem;">
+                    <span style="font-size:0.8rem; color:var(--text-secondary); width:100%; margin-bottom:0.2rem;">Quick Start Presets:</span>
+                    <button type="button" class="btn btn-secondary" onclick="startTimer(2)" style="width:auto; padding:0.4rem 0.8rem; font-size:0.85rem;">🪥 2m Teeth</button>
+                    <button type="button" class="btn btn-secondary" onclick="startTimer(5)" style="width:auto; padding:0.4rem 0.8rem; font-size:0.85rem;">⚡ 5m Reset</button>
+                    <button type="button" class="btn btn-secondary" onclick="startTimer(10)" style="width:auto; padding:0.4rem 0.8rem; font-size:0.85rem;">🧹 10m Tidy</button>
+                    <button type="button" class="btn btn-secondary" onclick="startTimer(15)" style="width:auto; padding:0.4rem 0.8rem; font-size:0.85rem;">📖 15m Focus</button>
+                    <button type="button" class="btn btn-secondary" onclick="startTimer(20)" style="width:auto; padding:0.4rem 0.8rem; font-size:0.85rem;">⏱️ 20m</button>
+                    <button type="button" class="btn btn-secondary" onclick="startTimer(30)" style="width:auto; padding:0.4rem 0.8rem; font-size:0.85rem;">🌙 30m</button>
+                </div>
+
+                <div style="display:flex; gap:0.5rem; align-items:center; padding-top:0.6rem; border-top:1px solid rgba(255,255,255,0.08);">
+                    <label for="customTimerMin" style="font-size:0.85rem; color:var(--text-secondary); margin:0;">Custom Minutes:</label>
+                    <input type="number" id="customTimerMin" value="15" min="1" max="120" style="width:80px; padding:0.35rem 0.6rem; border-radius:6px; background:rgba(0,0,0,0.3); color:white; border:1px solid var(--card-border);">
+                    <button type="button" class="btn btn-secondary" onclick="startCustomTimer()" style="width:auto; padding:0.4rem 0.9rem; font-size:0.85rem;">▶ Start Custom</button>
+                </div>
+            </section>
+
+            <!-- AUDIO VOLUME LEVELS CARD (COLUMN 1) -->
+            <section class="card">
+                <h2>🔊 Audio Volume Levels</h2>
+                <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">Configure playback volume levels for bedtime and music streaming.</p>
+
+                <div class="form-group">
+                    <label>🔊 Bedside Speaker Volume</label>
+                    <p style="color:var(--text-secondary); margin-bottom:0.5rem; font-size:0.8rem;">Controls local alarm chimes, sleep timers, and white noise (0-21).</p>
+                    <div class="range-container">
+                        <input type="range" id="currentVolume" min="0" max="21" oninput="updateRangeLabel('currentVolumeVal', this.value)" onchange="submitSettings()">
+                        <span class="range-value" id="currentVolumeVal">10</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SLEEP SOUNDS & QUICK CONTROLS CARD (COLUMN 2) -->
+            <section class="card">
+                <h2>🌙 Sleep Sounds & Timer</h2>
+                <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">Trigger calming white noise, set sleep timer, or start bedtime presets.</p>
+                
+                <div class="form-group">
+                    <label for="sleepDuration">Sleep Timer Duration</label>
+                    <select id="sleepDuration" onchange="submitSettings()">
+                        <option value="0">Off (Disabled)</option>
+                        <option value="5">5 Minutes</option>
+                        <option value="10">10 Minutes</option>
+                        <option value="15">15 Minutes</option>
+                        <option value="20">20 Minutes</option>
+                        <option value="30">30 Minutes</option>
+                        <option value="45">45 Minutes</option>
+                    </select>
+                </div>
+
+                <div class="player-controls" style="margin-bottom:1rem; margin-top:1.2rem;">
+                    <button type="button" class="btn" style="flex:1; background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%); color: white; border: none; font-weight: 600;" onclick="triggerGoodNight()">🌙 "Good Night" (30m Noise + Light Fade)</button>
+                </div>
+
+                <div class="player-controls">
+                    <button type="button" class="btn btn-secondary" style="flex:1;" onclick="controlAudio('noise_on')">🔊 Start White Noise</button>
+                    <button type="button" class="btn" style="background:#ef4444; color:white; flex:1;" onclick="controlAudio('noise_off')">⏹ Stop All Audio</button>
+                </div>
+            </section>
+
+            <!-- DEDICATED SPOTIFY CONNECT & FAVORITES CARD (FULL WIDTH BELOW) -->
+            <section class="card card-full">
+                <h2>🎵 Spotify Connect & LCD Clock Favorites</h2>
+                <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">Target your Echo speaker and select which 5 playlists appear on the clock's physical screen knob.</p>
+
+                <!-- LIVE SPOTIFY REMOTE CONTROL -->
+                <div style="background:rgba(56,189,248,0.06); padding:1rem 1.2rem; border-radius:12px; border:1px solid rgba(56,189,248,0.25); margin-bottom:1.2rem;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                        <span style="font-weight:700; color:var(--accent); font-size:0.95rem;">🎮 Live Playback Remote</span>
+                        <span id="spotifyPlayStatusBadge" class="status-badge" style="font-size:0.75rem;">⏸ PAUSED</span>
+                    </div>
+                    <div style="font-size:0.95rem; font-weight:600; color:var(--text-primary); margin-bottom:0.8rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="spotifyTrackDisplay">
+                        🎵 Idle
+                    </div>
+                    <div style="display:flex; gap:0.6rem; margin-bottom:0.9rem;">
+                        <button type="button" class="btn" style="flex:1; background:#ef4444; color:white; font-weight:700; font-size:0.9rem; padding:0.65rem;" onclick="remoteSpotifyPause()">⏸️ Pause</button>
+                        <button type="button" class="btn" style="flex:1; background:#10b981; color:white; font-weight:700; font-size:0.9rem; padding:0.65rem;" onclick="remoteSpotifyPlay()">▶️ Resume</button>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.25rem;">
+                            <span>🔊 Volume Control</span>
+                            <span id="spotifyVolVal" style="font-weight:700; color:var(--accent);">20%</span>
+                        </div>
+                        <input type="range" id="spotifyVolSlider" min="0" max="100" value="20" style="width:100%; accent-color:var(--accent);" oninput="document.getElementById('spotifyVolVal').textContent = this.value + '%'" onchange="remoteSpotifyVolume(this.value)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>📢 Target Connect Speaker</label>
+                    <p style="color:var(--text-secondary); margin-bottom:0.5rem; font-size:0.8rem;">Select active Spotify Connect speaker (e.g. Faye's Echo) for alarm & music playback.</p>
+                    <div style="display:flex; gap:0.5rem; align-items:center;">
+                        <select id="spotifyDeviceSelect" onchange="changeSpotifyDevice(this.value)" style="flex:1; min-width:200px;">
+                            <option value="">(Scanning for devices...)</option>
+                        </select>
+                        <button type="button" class="btn btn-secondary" style="flex:0 0 auto; width:auto; padding:0.75rem 1.4rem; font-size:0.9rem; margin:0;" onclick="refreshSpotifyDevices()">🔄 Scan</button>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:1.2rem; background:rgba(255,255,255,0.03); padding:1rem; border-radius:12px; border:1px solid rgba(255,255,255,0.08);">
+                    <label style="font-weight:600; color:var(--accent-glow);">⭐ Clock LCD Screen Favorites (Top 5)</label>
+                    <p style="color:var(--text-secondary); margin-bottom:0.8rem; font-size:0.8rem;">Select which 5 playlists appear on the physical clock knob. Slot #1 is the default!</p>
+                    <div style="display:grid; grid-template-columns:1fr; gap:0.5rem;" id="favoritePlaylistSlots">
+                        <!-- Populated by JS -->
+                    </div>
+                    <button type="button" class="btn" style="margin-top:0.8rem; width:100%; font-size:0.85rem; background:linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color:white; font-weight:600;" onclick="saveClockFavorites()">💾 Save Clock Favorites</button>
+                </div>
+
+                <div class="switch-group" style="margin-top:1.2rem; border-top:1px solid rgba(255,255,255,0.06); padding-top:0.9rem;">
+                    <span class="switch-label">🔀 Spotify Shuffle Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="spotifyShuffleState" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 5: DISPLAY & HUE -->
+        <div class="tab-section" id="tab-lights">
+            <!-- DISPLAY CONFIG CARD -->
+            <section class="card">
+                <h2>📺 Display Options</h2>
+                
+                <div class="switch-group">
+                    <span class="switch-label">LCD Backlight</span>
+                    <label class="switch">
+                        <input type="checkbox" id="backlight" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="switch-group">
+                    <span class="switch-label">Dusk-to-Dawn Auto Dimming</span>
+                    <label class="switch">
+                        <input type="checkbox" id="autoDimming" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group" style="margin-top: 0.8rem;">
+                    <label for="nightBigClock">🕰️ Jumbo Big Clock Display</label>
+                    <select id="nightBigClock" onchange="submitSettings()">
+                        <option value="0">Off</option>
+                        <option value="1">Always On</option>
+                        <option value="2">Night (10:00 PM – Alarm Time)</option>
+                    </select>
+                </div>
+
+                <h3 style="font-size:0.9rem; color:var(--accent); margin-top:1.5rem; margin-bottom:0.75rem; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:0.4rem; text-transform:uppercase; letter-spacing:0.5px;">📡 On-Screen Carousel Widgets</h3>
+
+                <div class="switch-group">
+                    <span class="switch-label">Show Weather Info</span>
+                    <label class="switch">
+                        <input type="checkbox" id="weather" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="switch-group">
+                    <span class="switch-label">Show School Calendar Info</span>
+                    <label class="switch">
+                        <input type="checkbox" id="schoolCalendarEnabled" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="switch-group" style="margin-top: 0.8rem;">
+                    <span class="switch-label">📅 Show Google Calendar Card</span>
+                    <label class="switch">
+                        <input type="checkbox" id="gcalEnabled" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group" style="margin-top: 0.8rem;">
+                    <label for="wmataMode">🚌 Show WMATA Bus Tracker</label>
+                    <select id="wmataMode" onchange="submitSettings()">
+                        <option value="0">Off</option>
+                        <option value="1">Mornings Only (5 AM – 9 AM, M-F)</option>
+                        <option value="2">All Day</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- HUE LIGHTS CARD -->
+            <section class="card">
+                <h2>💡 Philips Hue Lights</h2>
+                
+                <div class="switch-group">
+                    <span class="switch-label">Hue Lights Control</span>
+                    <label class="switch">
+                        <input type="checkbox" id="hueOn" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>Bulb Brightness</label>
+                    <div class="range-container">
+                        <input type="range" id="hueBrightness" min="0" max="100" oninput="updateRangeLabel('hueBrightnessVal', this.value)" onchange="submitSettings()">
+                        <span class="range-value" id="hueBrightnessVal">100%</span>
+                    </div>
+                </div>
+
+                <div class="switch-group">
+                    <span class="switch-label">Wake Up Sunrise Trigger</span>
+                    <label class="switch">
+                        <input type="checkbox" id="hueSunrise" onchange="submitSettings()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="hueDuration">Sunrise Transition Duration</label>
+                    <select id="hueDuration" onchange="submitSettings()">
+                        <option value="10">10 Minutes</option>
+                        <option value="20">20 Minutes</option>
+                        <option value="30">30 Minutes</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="hueScene">Philips Hue Ambient Scene</label>
+                    <select id="hueScene" onchange="submitSettings()"></select>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 6: CALENDAR & EVENTS -->
+        <div class="tab-section" id="tab-calendar">
+            <!-- GOOGLE CALENDAR SETTINGS CARD -->
+            <section class="card card-full">
+                <h2>📅 Google Calendar Settings</h2>
+                <div class="form-group" style="margin-bottom:0.25rem;">
+                    <label for="cfgGcalLookahead">⏳ Calendar Event Lookahead Window</label>
+                    <select id="cfgGcalLookahead" onchange="submitSettings()">
+                        <option value="24">24 Hours (1 Day)</option>
+                        <option value="48">48 Hours (2 Days — Recommended)</option>
+                        <option value="72">72 Hours (3 Days)</option>
+                        <option value="168">7 Days (1 Week)</option>
+                    </select>
+                    <span style="font-size:0.75rem; color:var(--text-secondary); margin-top:4px; display:block;">How far ahead the bedside clock looks for upcoming activities.</span>
+                </div>
+            </section>
+
+            <!-- SPECIAL CALENDAR COUNTDOWNS CARD -->
+            <section class="card card-full">
+                <h2>🗓️ Special Calendar Countdowns</h2>
+                <div id="countdownListContainer" style="display:flex; flex-direction:column; gap:0.75rem;"></div>
+                <button type="button" id="addCountdownBtn" onclick="addCountdownRow()" style="margin-top:0.75rem; width:100%; padding:0.75rem; border-radius:8px; border:1px solid var(--accent); background:transparent; color:var(--accent); cursor:pointer; font-size:0.95rem;">+ Add countdown</button>
+            </section>
+
+            <!-- SCHOOL CALENDAR PREVIEW CARD -->
+            <section class="card card-full">
+                <h2>🎒 Upcoming DCPS School Days Off</h2>
+                <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">Linked directly to her alarm schedule.</p>
+                <div id="schoolCalendarList" style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:8px; border:1px solid var(--card-border); font-size:0.95rem; line-height:1.6; color:var(--text-secondary);">
+                    <em>Loading upcoming days off...</em>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAB 6: API CONFIGURATION -->
+        <div class="tab-section" id="tab-api">
+            <!-- API & DEVICE CREDENTIALS CARD -->
+            <section class="card card-full">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.8rem; flex-wrap:wrap; gap:0.5rem;">
+                    <h2 style="margin:0;">🔐 API & Device Credentials</h2>
+                    <button type="button" id="btnUnlockApiConfig" class="btn btn-secondary" onclick="toggleApiConfigEdit()" style="width:auto; padding:0.4rem 0.9rem; font-size:0.85rem;">
+                        ✏️ Edit API Credentials
+                    </button>
+                </div>
+                <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.85rem;">
+                    Read-only by default to prevent accidental edits. Tap <strong>Edit API Credentials</strong> above to unlock.
+                </p>
+
+                <div class="form-group">
+                    <label for="cfgWmataApiKey">🚌 WMATA Bus API Key</label>
+                    <input type="password" id="cfgWmataApiKey" placeholder="Enter WMATA API Key" disabled onchange="submitSettings()">
+                </div>
+
+                <div class="form-group">
+                    <label for="cfgWmataStopId">📍 WMATA Bus Stop ID</label>
+                    <input type="text" id="cfgWmataStopId" placeholder="e.g. 1002754" disabled onchange="submitSettings()">
+                </div>
+
+                <div class="form-group">
+                    <label for="cfgWmataRouteFilter">🚍 WMATA Route Filter (Optional)</label>
+                    <input type="text" id="cfgWmataRouteFilter" placeholder="e.g. 70 or leave blank for all" disabled onchange="submitSettings()">
+                </div>
+
+                <div class="form-group" style="margin-top:1.2rem;">
+                    <label for="cfgSpotifyClientId">🎵 Spotify Client ID</label>
+                    <input type="password" id="cfgSpotifyClientId" placeholder="Spotify Client ID" disabled onchange="submitSettings()">
+                </div>
+
+                <div class="form-group">
+                    <label for="cfgSpotifyClientSecret">🔑 Spotify Client Secret</label>
+                    <input type="password" id="cfgSpotifyClientSecret" placeholder="Spotify Client Secret" disabled onchange="submitSettings()">
+                </div>
+
+                <div class="form-group">
+                    <label for="cfgHueBridgeIp">💡 Philips Hue Bridge IP</label>
+                    <input type="text" id="cfgHueBridgeIp" placeholder="e.g. 192.168.68.50" disabled onchange="submitSettings()">
+                </div>
+
+                <div class="form-group" style="margin-top:1.2rem;">
+                    <label for="cfgGcalFilterKeyword">🎯 Google Calendar Filter Keyword</label>
+                    <input type="text" id="cfgGcalFilterKeyword" placeholder="e.g. Faye" disabled onchange="submitSettings()">
+                    <span style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px; display:block;">Filters calendar events by name for upcoming activities.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="cfgGcalUrl">📅 Google Calendar Secret iCal URL (.ics)</label>
+                    <input type="password" id="cfgGcalUrl" placeholder="https://calendar.google.com/calendar/ical/.../basic.ics" disabled onchange="submitSettings()">
+                </div>
+            </section>
+
+        </div>
+
+        <!-- TAB 7: SYSTEM INFO -->
+        <div class="tab-section" id="tab-changelog">
+            <!-- DEVICE & RUNTIME DIAGNOSTICS -->
+            <section class="card card-full">
+                <h2>⚙️ Device & Runtime Diagnostics</h2>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 0.5rem;">
+                    <div style="background:rgba(0,0,0,0.25); padding:0.85rem 1.1rem; border-radius:10px; border:1px solid var(--card-border);">
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.25rem;">⏱️ Continuous Uptime</span>
+                        <span id="infoUptime" style="font-size:1.2rem; font-weight:700; color:var(--accent);">--</span>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.25); padding:0.85rem 1.1rem; border-radius:10px; border:1px solid var(--card-border);">
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.25rem;">🏷️ Installed Firmware</span>
+                        <span id="infoFirmware" style="font-size:1.2rem; font-weight:700; color:var(--text-primary);">v1.14</span>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.25); padding:0.85rem 1.1rem; border-radius:10px; border:1px solid var(--card-border);">
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.25rem;">📶 Wi-Fi Connection</span>
+                        <span id="infoWifi" style="font-size:1.1rem; font-weight:700; color:var(--text-primary);">--</span>
+                        <span id="infoIp" style="font-size:0.75rem; color:var(--text-secondary); display:block; margin-top:0.2rem;">--</span>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.25); padding:0.85rem 1.1rem; border-radius:10px; border:1px solid var(--card-border);">
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.25rem;">⚡ Power Source</span>
+                        <span id="infoPower" style="font-size:1.1rem; font-weight:700; color:var(--text-primary);">--</span>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.25); padding:0.85rem 1.1rem; border-radius:10px; border:1px solid var(--card-border);">
+                        <span style="font-size:0.8rem; color:var(--text-secondary); display:block; margin-bottom:0.25rem;">🔍 Last Boot Reason</span>
+                        <span id="infoResetReason" style="font-size:1.1rem; font-weight:700; color:var(--accent);">--</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card card-full">
+                <h2>📝 System Info & Release Notes</h2>
+                <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:8px; border:1px solid var(--card-border); font-size:0.95rem; line-height:1.6; color:var(--text-secondary);">
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:#38bdf8; font-size:1.05rem;">v1.14 — September 19, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">Night Mode USB power bank keep-alive pulse, Night Mode wake-on-dial without immediate action, clean sleep timer display with zZ icon, and Spotify 429 rate-limit prevention.</span>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.13 — September 16, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">Dedicated mobile web remote (/player) with sleep timer shortcuts, sleep timer countdown and custom zZ glyph on music playback screen, dial sleep timer access during music, flicker-free LCD rendering, and boot backlight stabilization.</span>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.12 — August 26, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">I2C bus optimization & state latching, Spotify global pause & auto token retry, live continuous uptime diagnostics, and instant knob wake responsiveness.</span>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.11 — August 21, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">Bedside visual countdown timer with live LCD progress bar, dial quick actions, audio ducking, and siren alert.</span>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.1.0 — August 21, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">Google Calendar integration, Bedside Agenda card, and configurable lookahead window.</span>
+                        <ul style="list-style:disc inside; padding-left:0.5rem; margin-top:0.5rem;">
+                            <li><strong>Google Calendar Integration:</strong> Automatically syncs your family or personal calendar activities using keyword filtering</li>
+                            <li><strong>Bedside Agenda Card (Card 4):</strong> Quick glance at your next upcoming event right from the bedside clock</li>
+                            <li><strong>Configurable Lookahead:</strong> Customize how far ahead to check for events (24h, 48h, 72h, or 7 days)</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.0.5 — August 18, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">Jumbo 2-line digital clock display for nighttime bedside readability.</span>
+                        <ul style="list-style:disc inside; padding-left:0.5rem; margin-top:0.5rem;">
+                            <li><strong>New:</strong> Jumbo 2-line 7-segment digital night clock with dynamic centering and AM/PM corner placement</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.0.4 — August 17, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">Automatic evening forecast flips and bedtime outdoor element transitions.</span>
+                        <ul style="list-style:disc inside; padding-left:0.5rem; margin-top:0.5rem;">
+                            <li><strong>New:</strong> 7:00 PM Bedtime Forecast Flip on Screen 2 to show tomorrow's High & RealFeel</li>
+                            <li><strong>New:</strong> Bedtime UV & Elements Transition on Screen 3 switching to tomorrow's peak UV index or rain arrival</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.0.3 — August 16, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">3-screen weather carousel suite and 1-click bedtime quick action menu.</span>
+                        <ul style="list-style:disc inside; padding-left:0.5rem; margin-top:0.5rem;">
+                            <li><strong>New:</strong> 3-Screen Weather Suite featuring Current Sky, Daily High/RealFeel, and Adaptive Outdoor Elements</li>
+                            <li><strong>New:</strong> 1-Click Bedtime Quick Action to instantly toggle White Noise from the dial</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.0.2 — August 16, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">Alexa hardware wake-up integration, dedicated NOAA UV screen, & room target assignment.</span>
+                        <ul style="list-style:disc inside; padding-left:0.5rem; margin-top:0.5rem;">
+                            <li><strong>New:</strong> Dedicated UV index screen powered by official NOAA/EPA ground solar radiation models</li>
+                            <li><strong>New:</strong> Sinric Pro Alexa hardware wake-up engine to wake sleeping Echo speakers before playback</li>
+                            <li><strong>Fix:</strong> Philips Hue default room configuration set to Faye's Room (Group ID <code style="background:rgba(255,255,255,0.1); padding:2px 4px; border-radius:4px;">1</code>)</li>
+                            <li><strong>Fix:</strong> Spotify target speaker routing updated to Faye's Echo Dot</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08);">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.0.1 — August 13, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">Spotify 25-playlist discovery, Web UI 5-slot favorite picker, weather UV calculation, & auto-dimming fixes.</span>
+                        <ul style="list-style:disc inside; padding-left:0.5rem; margin-top:0.5rem;">
+                            <li><strong>New:</strong> Spotify 25-playlist API discovery & Web UI 5-slot favorite selector</li>
+                            <li><strong>Fix:</strong> Open-Meteo weather API parsing so UV index displays accurately</li>
+                            <li><strong>Fix:</strong> Hardware auto-dimming driver decoupled from NVS settings</li>
+                            <li><strong>Fix:</strong> SPIFFS sound fallback loading and custom audio file playback over I2S</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom:1rem;">
+                        <strong style="color:var(--text-primary); font-size:1.05rem;">v1.0 — August 12, 2026</strong><br>
+                        <span style="font-size:0.85rem; color:var(--text-secondary);">Initial release of the Spotify Smart Alarm Clock.</span>
+                    </div>
+                    <ul style="list-style:disc inside; padding-left:0.5rem;">
+                        <li><strong>New:</strong> Alarm with Spotify, white noise, and sunrise light</li>
+                        <li><strong>New:</strong> Quick Actions menu</li>
+                        <li><strong>New:</strong> DCPS school calendar & WMATA bus screen</li>
+                        <li><strong>New:</strong> Weather, forecast, and NWS severe alerts</li>
+                        <li><strong>New:</strong> Parent intercom and reminders</li>
+                        <li><strong>New:</strong> Web dashboard for full configuration</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer style="margin-top:2.5rem; text-align:center; font-size:0.9rem; color:var(--text-secondary); padding-bottom:2.5rem; font-weight:500; display:flex; flex-direction:column; align-items:center; gap:0.75rem;">
+        <a href="/quick_start_guide.html" target="_blank" class="footer-guide-link">
+            <span>📖</span>
+            <span>Quick Start Guide & Cheat Sheet</span>
+            <span style="font-size:0.75rem; opacity:0.8;">↗</span>
+        </a>
+        <span>Built with ❤️ for Faye</span>
+    </footer>
+
+    <div id="toast">Settings Saved Successfully!</div>
+
+    <script>
+        function updateRangeLabel(id, val) {
+            document.getElementById(id).innerText = (id === 'hueBrightnessVal') ? val + '%' : val;
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function setIntercomMode(mode) {
+            const btnInstant = document.getElementById('btnModeInstant');
+            const btnScheduled = document.getElementById('btnModeScheduled');
+            const panelInstant = document.getElementById('panelInstant');
+            const panelScheduled = document.getElementById('panelScheduled');
+
+            if (mode === 'instant') {
+                btnInstant.classList.add('active');
+                btnScheduled.classList.remove('active');
+                panelInstant.style.display = 'block';
+                panelScheduled.style.display = 'none';
+            } else {
+                btnScheduled.classList.add('active');
+                btnInstant.classList.remove('active');
+                panelScheduled.style.display = 'block';
+                panelInstant.style.display = 'none';
+            }
+        }
+
+        function renderAffirmationInputs() {
+            const grid = document.getElementById('affirmationsGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+            const defaultAffirmations = [
+                "You got this! ♥",
+                "Sparkle today! ♥",
+                "Aesthetic queen♥",
+                "Have a magic day",
+                "Go shine! ♥",
+                "Today is yours!♥",
+                "Smile! ♥",
+                "Make it count! ♥",
+                "Be kind today ♥",
+                "Dream big! ♥",
+                "Stay golden ♥",
+                "Beautiful mind ♥",
+                "Live Laugh Love ♥",
+                "Keep on dancing♥",
+                "Create magic! ♥"
+            ];
+            for (let i = 0; i < 15; i++) {
+                const group = document.createElement('div');
+                group.className = 'form-group';
+                group.style.marginBottom = '0';
+                group.innerHTML = '<label for="affirm_' + i + '" style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.25rem; display:block;">#' + (i + 1) + '</label>' +
+                    '<input type="text" id="affirm_' + i + '" maxlength="16" placeholder="16 chars max" value="' + defaultAffirmations[i] + '" style="width:100%;">';
+                grid.appendChild(group);
+            }
+        }
+
+        async function submitAffirmations() {
+            const affirmations = [];
+            for (let i = 0; i < 15; i++) {
+                let text = document.getElementById('affirm_' + i).value.trim().replace(/♥/g, '\x07');
+                if (text.length > 16) text = text.substring(0, 16);
+                affirmations.push(text);
+            }
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ affirmations: affirmations })
+                });
+                if (response.ok) showToast("Affirmations Saved!");
+            } catch (err) {
+                console.error("Error saving affirmations:", err);
+            }
+        }
+
+        let MAX_COUNTDOWN_EVENTS = 3;
+
+        function renderCountdowns(data) {
+            const container = document.getElementById('countdownListContainer');
+            container.innerHTML = '';
+            const activeRows = (data || []).filter(c => c.enabled && c.name);
+            activeRows.forEach((c, idx) => {
+                container.appendChild(makeCountdownRow(idx, c));
+            });
+            if (activeRows.length === 0) {
+                container.appendChild(makeCountdownRow(0, {}));
+            }
+            updateAddButton();
+        }
+
+        function makeCountdownRow(index, c) {
+            const row = document.createElement('div');
+            row.className = 'countdown-slot';
+            row.style.cssText = 'display:flex; flex-direction:column; gap:0.5rem; padding:0.75rem; background:rgba(0,0,0,0.15); border-radius:8px; border:1px solid var(--card-border);';
+            const dateVal = (c.year && c.month && c.day) ? `${c.year}-${String(c.month).padStart(2,'0')}-${String(c.day).padStart(2,'0')}` : '';
+            row.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="color:var(--text-secondary); font-size:0.85rem;">#${index + 1}</span>
+                    <button type="button" onclick="removeCountdownRow(this)" style="background:transparent; border:none; color:var(--text-secondary); cursor:pointer; font-size:1rem; line-height:1;">×</button>
+                </div>
+                <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:0.5rem; align-items:end;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Event Name</label>
+                        <input type="text" class="countdownInput" data-field="name" maxlength="16" placeholder="e.g. Beach trip" value="${(c.name || '').replace(/"/g, '&quot;')}" onchange="submitSettings()">
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label>Date</label>
+                        <input type="date" class="countdownInput" data-field="date" value="${dateVal}" onchange="submitSettings()">
+                    </div>
+                </div>
+            `;
+            return row;
+        }
+
+        function addCountdownRow() {
+            const container = document.getElementById('countdownListContainer');
+            if (container.children.length >= MAX_COUNTDOWN_EVENTS) return;
+            const newRow = makeCountdownRow(container.children.length, {});
+            container.appendChild(newRow);
+            const nameInput = newRow.querySelector('[data-field="name"]');
+            if (nameInput) nameInput.focus();
+            updateAddButton();
+        }
+
+        function removeCountdownRow(btn) {
+            const row = btn.closest('.countdown-slot');
+            if (row) row.remove();
+            [...document.getElementById('countdownListContainer').children].forEach((r, i) => {
+                r.querySelector('span').textContent = '#' + (i + 1);
+            });
+            updateAddButton();
+            submitSettings();
+        }
+
+        function updateAddButton() {
+            const btn = document.getElementById('addCountdownBtn');
+            const container = document.getElementById('countdownListContainer');
+            if (btn) {
+                btn.disabled = container.children.length >= MAX_COUNTDOWN_EVENTS;
+                btn.style.opacity = btn.disabled ? '0.5' : '1';
+            }
+        }
+
+        function getCountdownPayload() {
+            const rows = document.getElementById('countdownListContainer').children;
+            const countdowns = [];
+            for (let i = 0; i < MAX_COUNTDOWN_EVENTS; i++) {
+                const row = rows[i];
+                if (row) {
+                    const name = (row.querySelector('[data-field="name"]').value || '').trim();
+                    const val = (row.querySelector('[data-field="date"]').value || '').trim();
+                    const [y, m, d] = val ? val.split('-').map(Number) : [0, 0, 0];
+                    const validDate = (y > 0 && m > 0 && d > 0);
+                    countdowns.push({
+                        enabled: (name.length > 0 && validDate),
+                        name: name,
+                        year: y || 0,
+                        month: m || 0,
+                        day: d || 0
+                    });
+                } else {
+                    countdowns.push({ enabled: false, name: "", year: 0, month: 0, day: 0 });
+                }
+            }
+            return countdowns;
+        }
+
+        // Fetch settings from ESP32
+        async function fetchSettings() {
+            try {
+                const active = document.activeElement;
+                if (active && (active.id === 'hueScene' || active.classList.contains('countdownInput'))) {
+                    return;
+                }
+
+                const response = await fetch('/api/settings?t=' + Date.now(), { cache: 'no-store' });
+                const data = await response.json();
+                
+                // Live Status & Alerts
+                if (data.clockTime && document.getElementById('liveClockTime')) {
+                    document.getElementById('liveClockTime').innerText = data.clockTime;
+                }
+                if (data.clockState && document.getElementById('liveClockState')) {
+                    document.getElementById('liveClockState').innerText = data.clockState;
+                }
+                if (data.ipAddress && document.getElementById('liveIpAddress')) {
+                    document.getElementById('liveIpAddress').innerText = 'IP: ' + data.ipAddress;
+                }
+                if (data.wifiSignalText && document.getElementById('liveWifiSignal')) {
+                    document.getElementById('liveWifiSignal').innerText = data.wifiSignalText;
+                }
+                if (data.powerSource && document.getElementById('livePowerSource')) {
+                    document.getElementById('livePowerSource').innerText = data.powerSource;
+                }
+
+                // Populate System Info Diagnostics & Uptime
+                if (data.uptimeSeconds !== undefined && document.getElementById('infoUptime')) {
+                    const secs = Number(data.uptimeSeconds);
+                    const d = Math.floor(secs / 86400);
+                    const h = Math.floor((secs % 86400) / 3600);
+                    const m = Math.floor((secs % 3600) / 60);
+                    const s = secs % 60;
+                    let uptimeStr = "";
+                    if (d > 0) uptimeStr += `${d}d `;
+                    if (h > 0 || d > 0) uptimeStr += `${h}h `;
+                    uptimeStr += `${m}m ${s}s`;
+                    document.getElementById('infoUptime').innerText = uptimeStr;
+                }
+                if (data.firmwareVersion && document.getElementById('infoFirmware')) {
+                    document.getElementById('infoFirmware').innerText = data.firmwareVersion;
+                }
+                if (data.wifiSignalText && document.getElementById('infoWifi')) {
+                    document.getElementById('infoWifi').innerText = data.wifiSignalText;
+                }
+                if (data.ipAddress && document.getElementById('infoIp')) {
+                    document.getElementById('infoIp').innerText = 'IP: ' + data.ipAddress;
+                }
+                if (data.powerSource && document.getElementById('infoPower')) {
+                    document.getElementById('infoPower').innerText = data.powerSource;
+                }
+                if (data.resetReason && document.getElementById('infoResetReason')) {
+                    document.getElementById('infoResetReason').innerText = data.resetReason;
+                }
+
+                // Live Weather & Environmental Status
+                if (data.weatherEnabled) {
+                    if (document.getElementById('weatherStatusSubsection')) {
+                        document.getElementById('weatherStatusSubsection').style.display = 'block';
+                    }
+                    const daysArr = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                    const nowD = new Date();
+                    const isEvening = nowD.getHours() >= 19;
+                    const curDayStr = daysArr[nowD.getDay()];
+                    const tmrwDayStr = daysArr[(nowD.getDay() + 1) % 7];
+                    const targetDay = isEvening ? tmrwDayStr : curDayStr;
+
+                    if (document.getElementById('liveWeatherCurrent')) {
+                        document.getElementById('liveWeatherCurrent').innerText = (data.weatherTemp !== undefined && data.weatherTemp !== 0) ? `${data.weatherTemp}°F (${data.weatherLabel || '--'})` : '--°F';
+                    }
+                    if (document.getElementById('liveWeatherHighLabel')) {
+                        document.getElementById('liveWeatherHighLabel').innerText = isEvening ? `📈 Tomorrow's Temps (Tmw)` : `📈 Today's Temps`;
+                    }
+                    if (document.getElementById('liveWeatherHigh')) {
+                        const hTemp = isEvening ? (data.weatherTomorrowHighTemp || data.weatherHighTemp) : data.weatherHighTemp;
+                        const fTemp = isEvening ? (data.weatherTomorrowFeelsLike || data.weatherFeelsLike) : data.weatherFeelsLike;
+                        document.getElementById('liveWeatherHigh').innerText = isEvening ? `Tmw ${hTemp || '--'}° (Feels ${fTemp || '--'}°)` : `Hi ${hTemp || '--'}° (Feels ${fTemp || '--'}°)`;
+                    }
+                    if (document.getElementById('liveWeatherElements')) {
+                        const activeChance = isEvening ? data.weatherTomorrowPrecipChance : data.weatherPrecipitationChance;
+                        const activeStartHour = isEvening ? data.weatherTomorrowRainStartHour : data.weatherRainStartHour;
+                        const activeUV = isEvening ? data.weatherTomorrowUVIndex : data.weatherUVIndex;
+                        const activeUVLbl = isEvening ? data.weatherTomorrowUVLabel : data.weatherUVLabel;
+
+                        if (activeChance >= 35 && activeStartHour >= 0) {
+                            let pName = "Rain";
+                            let hr12 = (activeStartHour % 12) || 12;
+                            let ampm = activeStartHour < 12 ? 'am' : 'pm';
+                            document.getElementById('liveWeatherElements').innerText = isEvening ? `Tmw ${pName} ${hr12}${ampm} (${activeChance}%)` : `${pName} ${hr12}${ampm} (${activeChance}%)`;
+                        } else if (activeUV >= 3) {
+                            document.getElementById('liveWeatherElements').innerText = isEvening ? `Tmw UV ${activeUV} (${activeUVLbl || 'Mod'})` : `Peak UV ${activeUV} (${activeUVLbl || 'Mod'})`;
+                        } else {
+                            document.getElementById('liveWeatherElements').innerText = isEvening ? `Tmw Dry (${activeChance || 0}%)` : `Dry Day (${activeChance || 0}%)`;
+                        }
+                    }
+                    if (document.getElementById('liveWeatherAlert')) {
+                        if (data.weatherAlertActive && data.weatherAlertTitle) {
+                            document.getElementById('liveWeatherAlert').innerHTML = `<span style="color:#ef4444; font-weight:bold;">⚠️ ${data.weatherAlertTitle}</span>`;
+                        } else {
+                            document.getElementById('liveWeatherAlert').innerHTML = `<span style="color:#22c55e;">✓ No Active Warnings</span>`;
+                        }
+                    }
+                } else {
+                    if (document.getElementById('weatherStatusSubsection')) {
+                        document.getElementById('weatherStatusSubsection').style.display = 'none';
+                    }
+                }
+
+                // Alarm
+                document.getElementById('alarmEnabled').checked = data.alarmEnabled;
+                document.getElementById('alarmTime').value = 
+                    String(data.alarmHour).padStart(2, '0') + ':' + String(data.alarmMinute).padStart(2, '0');
+                document.getElementById('alarmRepeat').value = data.alarmRepeatMode;
+                document.getElementById('alarmSound').value = data.alarmSoundIndex;
+                document.getElementById('alarmVolume').value = data.alarmVolume;
+                updateRangeLabel('alarmVolumeVal', data.alarmVolume);
+                document.getElementById('gentleWake').checked = data.gentleWakeEnabled;
+
+                // Bedtime/Audio Playback Volume
+                if (data.currentVolume !== undefined && document.getElementById('currentVolume')) {
+                    document.getElementById('currentVolume').value = data.currentVolume;
+                    updateRangeLabel('currentVolumeVal', data.currentVolume);
+                }
+                if (data.spotifyDevices && document.getElementById('spotifyDeviceSelect')) {
+                    const devSelect = document.getElementById('spotifyDeviceSelect');
+                    devSelect.innerHTML = '';
+                    if (data.spotifyDevices.length === 0) {
+                        devSelect.innerHTML = '<option value="">(No active Spotify Connect devices found)</option>';
+                    } else {
+                        data.spotifyDevices.forEach((d, idx) => {
+                            const opt = document.createElement('option');
+                            opt.value = d.id;
+                            opt.textContent = d.name;
+                            if (idx === data.selectedSpotifyDeviceIndex) opt.selected = true;
+                            devSelect.appendChild(opt);
+                        });
+                    }
+                }
+
+                // Populate LCD Screen Favorite Playlists Slots (Top 5)
+                const slotContainer = document.getElementById('favoritePlaylistSlots');
+                if (slotContainer) {
+                    const isFocused = slotContainer.contains(document.activeElement);
+                    const shouldRender = !window.favSlotsRendered || window.forceRebuildFavs || (!isFocused && slotContainer.children.length === 0);
+                    if (shouldRender) {
+                        window.favSlotsRendered = true;
+                        window.forceRebuildFavs = false;
+                        slotContainer.innerHTML = '';
+                        const favs = data.favoritePlaylists || [];
+                        const allPls = (data.allPlaylists && data.allPlaylists.length > 0) ? data.allPlaylists : (data.playlists || []);
+
+                        for (let slot = 0; slot < 5; slot++) {
+                            const currentFavUri = favs[slot] || '';
+                            let rowHtml = `<div style="display:flex; align-items:center; gap:0.5rem;"><span style="font-size:0.8rem; color:var(--accent-glow); width:55px; font-weight:600;">Slot #${slot+1}:</span><select class="fav-playlist-select" style="flex:1; font-size:0.85rem;"><option value="">-- (Select Playlist) --</option>`;
+                            allPls.forEach(p => {
+                                const isSel = (p.uri === currentFavUri) ? 'selected' : '';
+                                rowHtml += `<option value="${p.uri}" ${isSel}>${p.name}</option>`;
+                            });
+                            rowHtml += `</select></div>`;
+                            slotContainer.insertAdjacentHTML('beforeend', rowHtml);
+                        }
+                    }
+                }
+
+                // Affirmations (replace LCD custom-heart slot \x07 with a visible ♥)
+                if (data.affirmations && Array.isArray(data.affirmations)) {
+                    data.affirmations.forEach((text, i) => {
+                        const el = document.getElementById('affirm_' + i);
+                        if (el) el.value = (text || "").replace(/\u0007/g, '♥');
+                    });
+                }
+
+                // Hue
+                document.getElementById('hueOn').checked = data.hueLightsEnabled;
+                document.getElementById('hueBrightness').value = data.hueBrightness;
+                updateRangeLabel('hueBrightnessVal', data.hueBrightness);
+                document.getElementById('hueSunrise').checked = data.hueSunriseEnabled;
+                document.getElementById('hueDuration').value = data.hueSunriseDuration;
+
+                // Populate Hue Scene Options
+                if (data.hueScenes && Array.isArray(data.hueScenes)) {
+                    const sceneSelect = document.getElementById('hueScene');
+                    sceneSelect.innerHTML = '';
+                    data.hueScenes.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = s.id;
+                        opt.innerText = s.name;
+                        if (s.id === data.activeHueSceneID) opt.selected = true;
+                        sceneSelect.appendChild(opt);
+                    });
+                }
+
+                // Sleep & Noise
+                if (data.sleepDurationMinutes !== undefined && document.getElementById('sleepDuration')) {
+                    document.getElementById('sleepDuration').value = data.sleepDurationMinutes;
+                }
+
+                // Display & Shuffle
+                document.getElementById('backlight').checked = data.backlightState;
+                if (document.getElementById('autoDimming')) {
+                    document.getElementById('autoDimming').checked = data.autoDimmingEnabled;
+                }
+                document.getElementById('weather').checked = data.weatherEnabled;
+                if (document.getElementById('schoolCalendarEnabled') && data.schoolCalendarEnabled !== undefined) {
+                    document.getElementById('schoolCalendarEnabled').checked = data.schoolCalendarEnabled;
+                }
+                if (document.getElementById('gcalEnabled') && data.gcalEnabled !== undefined) {
+                    document.getElementById('gcalEnabled').checked = data.gcalEnabled;
+                }
+                if (data.spotifyShuffleState !== undefined && document.getElementById('spotifyShuffleState')) {
+                    document.getElementById('spotifyShuffleState').checked = data.spotifyShuffleState;
+                }
+                if (data.nightBrightness !== undefined && document.getElementById('nightBrightness')) {
+                    document.getElementById('nightBrightness').value = data.nightBrightness;
+                    if (document.getElementById('nightBrightnessVal')) {
+                        document.getElementById('nightBrightnessVal').innerText = data.nightBrightness + '%';
+                    }
+                }
+                if (data.dayBrightness !== undefined && document.getElementById('dayBrightness')) {
+                    document.getElementById('dayBrightness').value = data.dayBrightness;
+                    if (document.getElementById('dayBrightnessVal')) {
+                        document.getElementById('dayBrightnessVal').innerText = data.dayBrightness + '%';
+                    }
+                }
+                if (data.firmwareVersion !== undefined && document.getElementById('verBadge')) {
+                    document.getElementById('verBadge').innerText = data.firmwareVersion;
+                }
+                updateAutoDimUI(data.autoDimmingEnabled);
+
+                // Reminder
+                if (data.reminderEnabled !== undefined) {
+                    document.getElementById('reminderEnabled').checked = data.reminderEnabled;
+                    document.getElementById('reminderTime').value = 
+                        String(data.reminderHour || 16).padStart(2, '0') + ':' + String(data.reminderMinute || 30).padStart(2, '0');
+                    document.getElementById('reminderText').value = data.reminderText || "";
+                    document.getElementById('reminderSound').value = data.reminderSound || "chime";
+                }
+
+                // Countdowns
+                if (data.maxCountdownEvents !== undefined) {
+                    MAX_COUNTDOWN_EVENTS = data.maxCountdownEvents;
+                }
+                if (data.countdowns && Array.isArray(data.countdowns)) {
+                    renderCountdowns(data.countdowns);
+                }
+
+                // WMATA & API Credentials
+                if (data.wmataApiKey !== undefined && document.getElementById('cfgWmataApiKey')) {
+                    document.getElementById('cfgWmataApiKey').value = data.wmataApiKey;
+                }
+                if (data.wmataStopId !== undefined && document.getElementById('cfgWmataStopId')) {
+                    document.getElementById('cfgWmataStopId').value = data.wmataStopId;
+                }
+                if (data.wmataRouteFilter !== undefined && document.getElementById('cfgWmataRouteFilter')) {
+                    document.getElementById('cfgWmataRouteFilter').value = data.wmataRouteFilter;
+                }
+                if (data.wmataMode !== undefined && document.getElementById('wmataMode')) {
+                    document.getElementById('wmataMode').value = data.wmataMode;
+                }
+                if (data.nightBigClock !== undefined && document.getElementById('nightBigClock')) {
+                    document.getElementById('nightBigClock').value = data.nightBigClock;
+                }
+                if (data.spotifyClientId !== undefined && document.getElementById('cfgSpotifyClientId')) {
+                    document.getElementById('cfgSpotifyClientId').value = data.spotifyClientId;
+                }
+                if (data.spotifyClientSecret !== undefined && document.getElementById('cfgSpotifyClientSecret')) {
+                    document.getElementById('cfgSpotifyClientSecret').value = data.spotifyClientSecret;
+                }
+                if (data.hueBridgeIP !== undefined && document.getElementById('cfgHueBridgeIp')) {
+                    document.getElementById('cfgHueBridgeIp').value = data.hueBridgeIP;
+                }
+                if (data.gcalFilterKeyword !== undefined && document.getElementById('cfgGcalFilterKeyword')) {
+                    document.getElementById('cfgGcalFilterKeyword').value = data.gcalFilterKeyword;
+                }
+                if (data.gcalLookahead !== undefined && document.getElementById('cfgGcalLookahead')) {
+                    document.getElementById('cfgGcalLookahead').value = String(data.gcalLookahead);
+                }
+                if (data.gcalUrl !== undefined && document.getElementById('cfgGcalUrl')) {
+                    document.getElementById('cfgGcalUrl').value = data.gcalUrl;
+                }
+                if (document.getElementById('liveGCalNextEvent')) {
+                    let lookaheadH = Number(data.gcalLookahead) || 48;
+                    let defaultNoEv = "No events (" + (lookaheadH <= 24 ? "24h" : lookaheadH <= 48 ? "2d" : lookaheadH <= 72 ? "3d" : "7d") + ")";
+                    if (!data.gcalLoaded) {
+                        document.getElementById('liveGCalNextEvent').innerText = "Loading agenda...";
+                    } else {
+                        document.getElementById('liveGCalNextEvent').innerText = data.gcalNextEvent || defaultNoEv;
+                    }
+                }
+                if (document.getElementById('liveGCalKeyword')) {
+                    document.getElementById('liveGCalKeyword').innerText = '"' + (data.gcalFilterKeyword || "Faye") + '"';
+                }
+                if (document.getElementById('calendarStatusSubsection')) {
+                    document.getElementById('calendarStatusSubsection').style.display = (data.gcalEnabled) ? 'block' : 'none';
+                }
+
+                if (data.timerActive !== undefined) {
+                    const timerBadge = document.getElementById('liveTimerBadge');
+                    const timerTime = document.getElementById('liveTimerTime');
+                    if (timerBadge) {
+                        if (data.timerActive) {
+                            timerBadge.className = 'status-badge active';
+                            timerBadge.innerText = '⏱️ Running';
+                        } else {
+                            timerBadge.className = 'status-badge muted';
+                            timerBadge.innerText = 'Inactive';
+                        }
+                    }
+                    if (timerTime) {
+                        timerTime.innerText = data.timerActive ? data.timerTimeString : "--:--";
+                    }
+                }
+
+                // Active Settings & Status Badges
+                const badgeContainer = document.getElementById('activeSettingsBadges');
+                if (badgeContainer) {
+                    const repeatNames = ["Once", "Everyday", "Weekdays", "Weekends", "School Schedule"];
+                    
+                    let alHr = data.alarmHour || 0;
+                    let alAmPm = alHr >= 12 ? 'PM' : 'AM';
+                    let alHr12 = alHr % 12 || 12;
+                    let alTimeStr = (alHr12 < 10 ? '0' : '') + alHr12 + ':' + String(data.alarmMinute || 0).padStart(2, '0') + ' ' + alAmPm;
+                    
+                    let html = '';
+                    
+                    // 1. Alarm Badge
+                    if (data.alarmEnabled) {
+                        html += `<span class="status-badge active-green">🔔 Alarm Set (${alTimeStr} • ${repeatNames[data.alarmRepeatMode] || 'Repeat'})</span>`;
+                    } else {
+                        html += `<span class="status-badge muted">🔕 Alarm OFF</span>`;
+                    }
+
+                    // 2. Sunrise Light Simulation
+                    if (data.hueSunriseEnabled) {
+                        html += `<span class="status-badge active-amber">🌅 Sunrise Light ON (${data.hueSunriseDuration || 30}m)</span>`;
+                    } else {
+                        html += `<span class="status-badge muted">🌅 Sunrise Light OFF</span>`;
+                    }
+
+                    // 3. Current Audio / State
+                    if (data.clockState === "🌙 Sleep Noise Active") {
+                        html += `<span class="status-badge active-blue">🌊 White Noise Active</span>`;
+                    } else if (data.clockState && data.clockState.includes("ALERT")) {
+                        html += `<span class="status-badge active-red">⚠️ ${data.clockState}</span>`;
+                    } else if (data.clockState === "🔔 ALARM RINGING!") {
+                        html += `<span class="status-badge active-red">🔔 Alarm Ringing!</span>`;
+                    } else {
+                        html += `<span class="status-badge muted">⏸️ Audio Engine Idle</span>`;
+                    }
+
+                    // 4. Auto-Night Dimming
+                    if (data.autoDimmingEnabled) {
+                        html += `<span class="status-badge active-purple">🌙 Auto Night Dimming ON</span>`;
+                    } else {
+                        html += `<span class="status-badge muted">☀️ Fixed Brightness (100%)</span>`;
+                    }
+
+                    // 5. Weather Info
+                    if (data.weatherEnabled) {
+                        html += `<span class="status-badge active-sky">🌤️ Live Weather Enabled</span>`;
+                    } else {
+                        html += `<span class="status-badge muted">🌤️ Weather Info OFF</span>`;
+                    }
+
+                    // 6. Spotify Shuffle
+                    if (data.spotifyShuffleState) {
+                        html += `<span class="status-badge active-green">🔀 Spotify Shuffle ON</span>`;
+                    }
+
+                    // 7. Scheduled Reminder
+                    if (data.reminderEnabled) {
+                        let rmHr = data.reminderHour || 0;
+                        let rmAmPm = rmHr >= 12 ? 'PM' : 'AM';
+                        let rmHr12 = rmHr % 12 || 12;
+                        let rmTimeStr = (rmHr12 < 10 ? '0' : '') + rmHr12 + ':' + String(data.reminderMinute || 0).padStart(2, '0') + ' ' + rmAmPm;
+                        html += `<span class="status-badge active-orange">📢 Reminder Set (${rmTimeStr}: "${data.reminderText || 'Active'}")</span>`;
+                    }
+
+                    // 8. Closest Countdown
+                    if (data.countdowns && Array.isArray(data.countdowns)) {
+                        const nowMid = new Date();
+                        nowMid.setHours(0, 0, 0, 0);
+                        let closestDays = -1;
+                        let closestName = "";
+                        data.countdowns.forEach(c => {
+                            if (c.enabled && c.year > 0 && c.name) {
+                                const target = new Date(c.year, c.month - 1, c.day, 0, 0, 0, 0);
+                                const d = Math.round((target - nowMid) / 86400000);
+                                if (d >= 0 && (closestDays < 0 || d < closestDays)) {
+                                    closestDays = d;
+                                    closestName = c.name;
+                                }
+                            }
+                        });
+                        if (closestDays >= 0 && closestName) {
+                            let cdText;
+                            if (closestDays === 0) cdText = `🗓️ ${closestName} (TODAY!)`;
+                            else if (closestDays === 1) cdText = `🗓️ ${closestName} (T-1d)`;
+                            else cdText = `🗓️ ${closestName} (T-${closestDays}d)`;
+                            html += `<span class="status-badge active-green">${cdText}</span>`;
+                        }
+                    }
+
+                    // 9. Room Lights
+                    if (data.hueLightsEnabled) {
+                        html += `<span class="status-badge active-gold">💡 Room Hue Lights ON (${data.hueBrightness || 100}%)</span>`;
+                    }
+
+                    badgeContainer.innerHTML = html;
+                }
+                fetchSpotifyDebug();
+            } catch (err) {
+                console.error("Error loading settings:", err);
+            }
+        }
+
+        async function remoteSpotifyPause() {
+            try {
+                await fetch('/api/spotify/pause', { method: 'POST' });
+                showToast('⏸️ Spotify Paused');
+                setTimeout(fetchSpotifyDebug, 500);
+            } catch (e) {
+                showToast('Error pausing Spotify');
+            }
+        }
+
+        async function remoteSpotifyPlay() {
+            try {
+                await fetch('/api/spotify/play', { method: 'POST' });
+                showToast('▶️ Spotify Resumed');
+                setTimeout(fetchSpotifyDebug, 500);
+            } catch (e) {
+                showToast('Error resuming Spotify');
+            }
+        }
+
+        async function remoteSpotifyVolume(val) {
+            try {
+                await fetch('/api/spotify/volume', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: 'percent=' + encodeURIComponent(val)
+                });
+                showToast('🔊 Volume: ' + val + '%');
+                setTimeout(fetchSpotifyDebug, 600);
+            } catch (e) {
+                showToast('Error setting volume');
+            }
+        }
+
+        async function fetchSpotifyDebug() {
+            try {
+                const res = await fetch('/api/spotify/debug?t=' + Date.now(), { cache: 'no-store' });
+                if (res.ok) {
+                    const d = await res.json();
+                    const badge = document.getElementById('spotifyPlayStatusBadge');
+                    const trk = document.getElementById('spotifyTrackDisplay');
+                    const slider = document.getElementById('spotifyVolSlider');
+                    const volVal = document.getElementById('spotifyVolVal');
+                    if (badge) {
+                        badge.className = d.isPlaying ? 'status-badge active-green' : 'status-badge';
+                        badge.textContent = d.isPlaying ? '▶ PLAYING' : '⏸ PAUSED';
+                    }
+                    if (trk) {
+                        trk.textContent = '🎵 ' + (d.track || 'Idle');
+                    }
+                    if (slider && document.activeElement !== slider) {
+                        slider.value = d.volumePercent;
+                        if (volVal) volVal.textContent = d.volumePercent + '%';
+                    }
+                }
+            } catch (e) {}
+        }
+
+        async function changeSpotifyDevice(devId) {
+            if (!devId) return;
+            try {
+                await fetch('/api/spotify/select_device', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: 'id=' + encodeURIComponent(devId)
+                });
+                showToast('Spotify playback target updated!');
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        async function refreshSpotifyDevices() {
+            try {
+                window.forceRebuildFavs = true;
+                await fetch('/api/spotify/fetch_devices', { method: 'POST' });
+                showToast('Scanning for Spotify Connect devices & playlists...');
+                setTimeout(fetchSettings, 2000);
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        async function saveClockFavorites() {
+            const selects = document.querySelectorAll('.fav-playlist-select');
+            const favs = [];
+            selects.forEach(s => favs.push(s.value));
+            try {
+                const resp = await fetch('/api/spotify/save_favorites', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ favorites: favs })
+                });
+                if (resp.ok) {
+                    window.forceRebuildFavs = true;
+                    showToast('Clock LCD Favorites saved!');
+                    setTimeout(fetchSettings, 1000);
+                } else {
+                    showToast('Failed to save favorites.');
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        function updateAutoDimUI(autoDimOn) {
+            const nightGroup = document.getElementById('nightBrightnessGroup');
+            const dayLabel = document.getElementById('dayBrightnessLabel');
+            if (nightGroup) {
+                nightGroup.style.display = autoDimOn ? 'block' : 'none';
+            }
+            if (dayLabel) {
+                dayLabel.innerText = autoDimOn ? '☀️ Day Brightness (MOSFET)' : '☀️ Brightness (MOSFET)';
+            }
+        }
+
+        function onAutoDimToggle() {
+            const el = document.getElementById('autoDimming');
+            if (el) {
+                updateAutoDimUI(el.checked);
+            }
+            submitSettings();
+        }
+
+        // Debounced settings submission to prevent HTTP POST floods during slider dragging
+        let s_submitDebounceTimer = null;
+        function submitSettings() {
+            if (s_submitDebounceTimer) clearTimeout(s_submitDebounceTimer);
+            s_submitDebounceTimer = setTimeout(performSubmitSettings, 300);
+        }
+
+        async function performSubmitSettings() {
+            const alarmTimeVal = document.getElementById('alarmTime').value || "07:00";
+            const [hour, minute] = alarmTimeVal.split(':').map(Number);
+
+            const remTimeVal = document.getElementById('reminderTime').value || "16:30";
+            const [remHour, remMin] = remTimeVal.split(':').map(Number);
+
+            const countdowns = getCountdownPayload();
+
+            const payload = {
+                alarmEnabled: document.getElementById('alarmEnabled').checked,
+                alarmHour: hour,
+                alarmMinute: minute,
+                alarmRepeatMode: Number(document.getElementById('alarmRepeat').value),
+                alarmSoundIndex: Number(document.getElementById('alarmSound').value),
+                alarmVolume: Number(document.getElementById('alarmVolume').value),
+                gentleWakeEnabled: document.getElementById('gentleWake').checked,
+
+                hueLightsEnabled: document.getElementById('hueOn').checked,
+                hueBrightness: Number(document.getElementById('hueBrightness').value),
+                hueSunriseEnabled: document.getElementById('hueSunrise').checked,
+                hueSunriseDuration: Number(document.getElementById('hueDuration').value),
+                activeHueSceneID: document.getElementById('hueScene') ? document.getElementById('hueScene').value : "",
+
+                sleepDurationMinutes: document.getElementById('sleepDuration') ? Number(document.getElementById('sleepDuration').value) : 0,
+                currentVolume: document.getElementById('currentVolume') ? Number(document.getElementById('currentVolume').value) : 10,
+                spotifyVolumePercent: document.getElementById('spotifyVolumePercent') ? Number(document.getElementById('spotifyVolumePercent').value) : 50,
+
+                backlightState: document.getElementById('backlight').checked,
+                autoDimmingEnabled: document.getElementById('autoDimming') ? document.getElementById('autoDimming').checked : false,
+                weatherEnabled: document.getElementById('weather').checked,
+                schoolCalendarEnabled: document.getElementById('schoolCalendarEnabled') ? document.getElementById('schoolCalendarEnabled').checked : true,
+                gcalEnabled: document.getElementById('gcalEnabled') ? document.getElementById('gcalEnabled').checked : true,
+                gcalFilterKeyword: document.getElementById('cfgGcalFilterKeyword') ? document.getElementById('cfgGcalFilterKeyword').value : "Faye",
+                gcalLookahead: document.getElementById('cfgGcalLookahead') ? Number(document.getElementById('cfgGcalLookahead').value) : 48,
+                gcalUrl: document.getElementById('cfgGcalUrl') ? document.getElementById('cfgGcalUrl').value : "",
+                spotifyShuffleState: document.getElementById('spotifyShuffleState') ? document.getElementById('spotifyShuffleState').checked : false,
+                nightBrightness: document.getElementById('nightBrightness') ? Number(document.getElementById('nightBrightness').value) : 2,
+                dayBrightness: document.getElementById('dayBrightness') ? Number(document.getElementById('dayBrightness').value) : 100,
+
+                reminderEnabled: document.getElementById('reminderEnabled').checked,
+                reminderHour: remHour,
+                reminderMinute: remMin,
+                reminderText: document.getElementById('reminderText').value,
+                reminderSound: document.getElementById('reminderSound').value,
+
+                countdowns: countdowns,
+
+                wmataApiKey: document.getElementById('cfgWmataApiKey') ? document.getElementById('cfgWmataApiKey').value : "",
+                wmataStopId: document.getElementById('cfgWmataStopId') ? document.getElementById('cfgWmataStopId').value : "1002754",
+                wmataRouteFilter: document.getElementById('cfgWmataRouteFilter') ? document.getElementById('cfgWmataRouteFilter').value : "",
+                wmataMode: document.getElementById('wmataMode') ? Number(document.getElementById('wmataMode').value) : 0,
+                nightBigClock: document.getElementById('nightBigClock') ? Number(document.getElementById('nightBigClock').value) : 2,
+                hueBridgeIP: document.getElementById('cfgHueBridgeIp') ? document.getElementById('cfgHueBridgeIp').value : ""
+            };
+
+            try {
+                const response = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) showToast("Settings Saved!");
+            } catch (err) {
+                console.error("Error saving settings:", err);
+            }
+        }
+
+        let apiConfigUnlocked = false;
+        async function toggleApiConfigEdit() {
+            if (!apiConfigUnlocked) {
+                const pin = prompt("Enter settings passcode to unlock:");
+                if (pin === null) return; // User cancelled
+                
+                try {
+                    const response = await fetch('/api/unlock_settings', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ passcode: pin })
+                    });
+                    if (!response.ok) {
+                        alert("Incorrect passcode!");
+                        return;
+                    }
+                } catch (err) {
+                    console.error("Unlock failed:", err);
+                    alert("Connection error occurred.");
+                    return;
+                }
+            }
+
+            apiConfigUnlocked = !apiConfigUnlocked;
+            const btn = document.getElementById('btnUnlockApiConfig');
+            const inputs = [
+                'cfgWmataApiKey', 'cfgWmataStopId', 'cfgWmataRouteFilter',
+                'cfgSpotifyClientId', 'cfgSpotifyClientSecret', 'cfgHueBridgeIp',
+                'cfgGcalFilterKeyword', 'cfgGcalUrl'
+            ];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.disabled = !apiConfigUnlocked;
+                    if (apiConfigUnlocked && el.type === 'password') {
+                        el.type = 'text';
+                    } else if (!apiConfigUnlocked && (id.includes('Key') || id.includes('Secret') || id.includes('Client') || id.includes('Url'))) {
+                        el.type = 'password';
+                    }
+                }
+            });
+            if (btn) {
+                btn.innerHTML = apiConfigUnlocked ? '🔒 Lock Credentials' : '✏️ Edit API Credentials';
+                btn.style.background = apiConfigUnlocked ? '#ef4444' : 'rgba(255, 255, 255, 0.08)';
+                btn.style.color = apiConfigUnlocked ? '#ffffff' : 'var(--text-primary)';
+            }
+        }
+
+        // Test Alarm & Sunrise Light
+        async function testAlarm() {
+            try {
+                const response = await fetch('/api/test_alarm', { method: 'POST' });
+                if (response.ok) showToast("🧪 Test Alarm Triggered!");
+            } catch (err) {
+                showToast("Connection Error.");
+            }
+        }
+
+        // Trigger Good Night Bedtime Preset
+        async function triggerGoodNight() {
+            try {
+                const response = await fetch('/api/good_night', { method: 'POST' });
+                if (response.ok) showToast("🌙 Good Night Activated!");
+            } catch (err) {
+                showToast("Connection Error.");
+            }
+        }
+
+        // Trigger Immediate Weather Sync
+        async function syncWeatherNow() {
+            const badge = document.getElementById('weatherSyncBadge');
+            if (badge) {
+                badge.innerText = '⏳ Syncing...';
+                badge.style.opacity = '0.7';
+            }
+            try {
+                const response = await fetch('/api/weather_sync', { method: 'POST' });
+                if (response.ok) {
+                    showToast("🌤️ Weather Sync Triggered!");
+                    setTimeout(fetchSettings, 1200);
+                    setTimeout(fetchSettings, 3500);
+                } else {
+                    showToast("Sync request failed.");
+                }
+            } catch (err) {
+                showToast("Connection Error.");
+            } finally {
+                setTimeout(() => {
+                    if (badge) {
+                        badge.innerText = '🔄 Sync Weather';
+                        badge.style.opacity = '1';
+                    }
+                }, 4000);
+            }
+        }
+
+        // Control Audio Noise Engine
+        async function controlAudio(action) {
+            try {
+                const response = await fetch('/api/audio/' + action, { method: 'POST' });
+                if (response.ok) showToast("Audio Engine Updated.");
+            } catch (err) {
+                showToast("Connection Error.");
+            }
+        }
+
+        // Send Parent Intercom Message
+        async function sendIntercomMessage() {
+            const text = document.getElementById('intercomText').value.trim();
+            const sound = document.getElementById('intercomSound').value;
+            if (!text) {
+                showToast("Please enter a message.");
+                return;
+            }
+            try {
+                const response = await fetch('/api/message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text, sound: sound })
+                });
+                if (response.ok) {
+                    showToast("Message Sent to Clock!");
+                    document.getElementById('intercomText').value = "";
+                } else {
+                    showToast("Failed to send message.");
+                }
+            } catch (err) {
+                showToast("Connection Error.");
+            }
+        }
+
+        const TAB_LABELS = {
+            'status': '🌐 Status & Alerts',
+            'alarm': '⏰ Alarm & Gentle Wake',
+            'intercom': '📢 Parent Intercom',
+            'bedtime': '🔊 Audio & Sleep Timers',
+            'lights': '🖥️ Display & Philips Hue',
+            'calendar': '🗓️ Calendars & Transit',
+            'api': '🔑 API & Integrations',
+            'changelog': '📝 System Diagnostics'
+        };
+
+        function toggleDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const backdrop = document.getElementById('drawerBackdrop');
+            if (drawer && backdrop) {
+                if (drawer.classList.contains('active')) {
+                    closeDrawer();
+                } else {
+                    openDrawer();
+                }
+            }
+        }
+
+        function openDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const backdrop = document.getElementById('drawerBackdrop');
+            if (drawer && backdrop) {
+                drawer.classList.add('active');
+                backdrop.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('navDrawer');
+            const backdrop = document.getElementById('drawerBackdrop');
+            if (drawer && backdrop) {
+                drawer.classList.remove('active');
+                backdrop.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeDrawer();
+        });
+
+        // Tab Navigation Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.drawer-item').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+            
+            const btn = document.getElementById('tab-btn-' + tabId);
+            const sec = document.getElementById('tab-' + tabId);
+            if (btn) btn.classList.add('active');
+            if (sec) sec.classList.add('active');
+            
+            const pillLabel = document.getElementById('currentTabLabel');
+            if (pillLabel && TAB_LABELS[tabId]) {
+                pillLabel.innerText = TAB_LABELS[tabId];
+            }
+            
+            localStorage.setItem('activeTab', tabId);
+            closeDrawer();
+        }
+
+        // ===== PCM WAV Voice Recording Engine =====
+        // ESP32-audioI2S expects PCM WAV (16-bit, mono).
+        // Browser mic: capture raw PCM via AudioContext + ScriptProcessor.
+        // Mobile upload: decode any format via decodeAudioData, then re-encode as WAV.
+        const TARGET_SAMPLE_RATE = 16000; // 16kHz = clear enough, matches I2S default
+        let isRecording = false;
+        let voiceTimer = null;
+        let voiceSecondsLeft = 30;
+        let voiceAudioCtx = null;
+        let voiceSourceNode = null;
+        let voiceProcessorNode = null;
+        let voicePcmBuffers = [];
+        let voiceMicStream = null;
+
+        // Build a proper RIFF WAV file from 16-bit PCM samples
+        function buildWavBlob(pcm16Array, sampleRate) {
+            const numSamples = pcm16Array.length;
+            const byteRate = sampleRate * 2; // 16-bit mono = 2 bytes/sample
+            const dataSize = numSamples * 2;
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+
+            // RIFF header
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + dataSize, true);
+            writeString(view, 8, 'WAVE');
+
+            // fmt chunk
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);        // chunk size
+            view.setUint16(20, 1, true);          // PCM format
+            view.setUint16(22, 1, true);          // mono
+            view.setUint32(24, sampleRate, true); // sample rate
+            view.setUint32(28, byteRate, true);   // byte rate
+            view.setUint16(32, 2, true);          // block align
+            view.setUint16(34, 16, true);         // bits per sample
+
+            // data chunk
+            writeString(view, 36, 'data');
+            view.setUint32(40, dataSize, true);
+
+            // Write PCM samples
+            for (let i = 0; i < numSamples; i++) {
+                view.setInt16(44 + i * 2, pcm16Array[i], true);
+            }
+
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
+
+        function writeString(view, offset, str) {
+            for (let i = 0; i < str.length; i++) {
+                view.setUint8(offset + i, str.charCodeAt(i));
+            }
+        }
+
+        // Downsample Float32 audio data to target rate and convert to Int16
+        function downsampleToInt16(float32Data, inputRate, outputRate) {
+            const ratio = inputRate / outputRate;
+            const outLength = Math.floor(float32Data.length / ratio);
+            const result = new Int16Array(outLength);
+            for (let i = 0; i < outLength; i++) {
+                const srcIdx = i * ratio;
+                const lo = Math.floor(srcIdx);
+                const hi = Math.min(lo + 1, float32Data.length - 1);
+                const frac = srcIdx - lo;
+                let sample = float32Data[lo] * (1 - frac) + float32Data[hi] * frac;
+                // Clamp to [-1, 1] and convert to 16-bit
+                sample = Math.max(-1, Math.min(1, sample));
+                result[i] = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+            }
+            return result;
+        }
+
+        // TEMP: download and play the recorded voice memo in the browser for testing
+        async function playVoiceMemo() {
+            const box = document.getElementById('voiceStatusBox');
+            try {
+                box.innerText = '⏳ Fetching last memo...';
+                box.style.color = '#38bdf8';
+                const response = await fetch('/api/voice_memo.wav');
+                if (!response.ok) {
+                    box.innerText = '⚠️ No memo recorded yet.';
+                    box.style.color = '#ef4444';
+                    return;
+                }
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const player = new Audio(url);
+                player.onended = () => URL.revokeObjectURL(url);
+                player.onerror = () => { URL.revokeObjectURL(url); box.innerText = '❌ Browser could not play memo.'; box.style.color = '#ef4444'; };
+                box.innerText = '▶️ Playing last memo...';
+                box.style.color = '#22c55e';
+                await player.play();
+            } catch (err) {
+                console.error(err);
+                box.innerText = '❌ Error playing memo.';
+                box.style.color = '#ef4444';
+            }
+        }
+
+        function resetVoiceBtn() {
+            isRecording = false;
+            if (voiceTimer) clearInterval(voiceTimer);
+            const btn = document.getElementById('voiceRecordBtn');
+            if (btn) {
+                btn.style.background = '';
+                btn.style.color = '';
+                btn.innerHTML = '<span class="voice-icon">🎙️</span><span>Start Live Mic</span>';
+            }
+        }
+
+        async function toggleVoiceRecording() {
+            const btn = document.getElementById('voiceRecordBtn');
+            const box = document.getElementById('voiceStatusBox');
+
+            if (!isRecording) {
+                try {
+                    voiceMicStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    voicePcmBuffers = [];
+
+                    // Create AudioContext at browser's native rate (usually 44100 or 48000)
+                    voiceAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    // Chrome suspends AudioContext by default - must resume explicitly
+                    if (voiceAudioCtx.state === 'suspended') await voiceAudioCtx.resume();
+                    voiceSourceNode = voiceAudioCtx.createMediaStreamSource(voiceMicStream);
+
+                    // Use AudioWorklet (modern) with fallback to ScriptProcessor
+                    if (voiceAudioCtx.audioWorklet) {
+                        const workletCode = `
+                            class PcmProcessor extends AudioWorkletProcessor {
+                                process(inputs) {
+                                    const input = inputs[0];
+                                    if (input && input.length > 0 && input[0].length > 0) {
+                                        this.port.postMessage(input[0]);
+                                    }
+                                    return true;
+                                }
+                            }
+                            registerProcessor('pcm-processor', PcmProcessor);
+                        `;
+                        const blob = new Blob([workletCode], { type: 'application/javascript' });
+                        const url = URL.createObjectURL(blob);
+                        await voiceAudioCtx.audioWorklet.addModule(url);
+                        voiceProcessorNode = new AudioWorkletNode(voiceAudioCtx, 'pcm-processor');
+                        voiceProcessorNode.port.onmessage = (e) => {
+                            if (isRecording) {
+                                voicePcmBuffers.push(new Float32Array(e.data));
+                            }
+                        };
+                        voiceSourceNode.connect(voiceProcessorNode);
+                        voiceProcessorNode.connect(voiceAudioCtx.destination);
+                        URL.revokeObjectURL(url);
+                    } else {
+                        // Fallback for older browsers
+                        voiceProcessorNode = voiceAudioCtx.createScriptProcessor(4096, 1, 1);
+                        voiceProcessorNode.onaudioprocess = function(e) {
+                            if (!isRecording) return;
+                            const input = e.inputBuffer.getChannelData(0);
+                            voicePcmBuffers.push(new Float32Array(input));
+                        };
+                        voiceSourceNode.connect(voiceProcessorNode);
+                        voiceProcessorNode.connect(voiceAudioCtx.destination);
+                    }
+
+                    isRecording = true;
+                    voiceSecondsLeft = 15;
+
+                    btn.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+                    btn.style.color = '#ffffff';
+                    btn.innerHTML = `<span class="voice-icon">🔴</span><span>END (${voiceSecondsLeft}s)</span>`;
+
+                    box.innerText = '🎙️ Recording voice memo... (15s max auto-kill)';
+                    box.style.color = '#ef4444';
+
+                    if (voiceTimer) clearInterval(voiceTimer);
+                    voiceTimer = setInterval(() => {
+                        voiceSecondsLeft--;
+                        if (voiceSecondsLeft <= 0) {
+                            stopVoiceRecording();
+                        } else {
+                            btn.innerHTML = `<span class="voice-icon">🔴</span><span>END (${voiceSecondsLeft}s)</span>`;
+                        }
+                    }, 1000);
+
+                } catch (err) {
+                    console.error("Mic Error:", err);
+                    box.innerText = '🔒 Mic Blocked over HTTP (Enable Chrome Flag)';
+                    box.style.color = '#ef4444';
+                    showToast("Mic blocked over HTTP. Enable Chrome Flag!");
+                    resetVoiceBtn();
+                }
+            } else {
+                stopVoiceRecording();
+            }
+        }
+
+        function stopVoiceRecording() {
+            if (voiceTimer) clearInterval(voiceTimer);
+            if (!isRecording) { resetVoiceBtn(); return; }
+            isRecording = false;
+
+            const box = document.getElementById('voiceStatusBox');
+            box.innerText = '⏳ Encoding PCM WAV and uploading...';
+            box.style.color = '#38bdf8';
+
+            // Disconnect audio nodes
+            if (voiceProcessorNode) { voiceProcessorNode.disconnect(); voiceProcessorNode = null; }
+            if (voiceSourceNode) { voiceSourceNode.disconnect(); voiceSourceNode = null; }
+            if (voiceMicStream) { voiceMicStream.getTracks().forEach(t => t.stop()); voiceMicStream = null; }
+
+            // Merge all PCM buffers into one Float32Array
+            let totalLen = 0;
+            for (const buf of voicePcmBuffers) totalLen += buf.length;
+            const merged = new Float32Array(totalLen);
+            let offset = 0;
+            for (const buf of voicePcmBuffers) { merged.set(buf, offset); offset += buf.length; }
+            voicePcmBuffers = [];
+
+            const inputRate = voiceAudioCtx ? voiceAudioCtx.sampleRate : 48000;
+            if (voiceAudioCtx) { voiceAudioCtx.close(); voiceAudioCtx = null; }
+
+            if (totalLen === 0) {
+                box.innerText = '⚠️ Empty audio recorded.';
+                box.style.color = '#ef4444';
+                resetVoiceBtn();
+                return;
+            }
+
+            // Downsample and encode as WAV
+            const pcm16 = downsampleToInt16(merged, inputRate, TARGET_SAMPLE_RATE);
+            const wavBlob = buildWavBlob(pcm16, TARGET_SAMPLE_RATE);
+            console.log(`[Voice] Encoded WAV: ${pcm16.length} samples, ${wavBlob.size} bytes, ${inputRate}Hz -> ${TARGET_SAMPLE_RATE}Hz`);
+            sendVoiceBlob(wavBlob);
+        }
+
+        // iOS workaround: decode AAC/m4a by playing through an <audio> element and
+        // capturing PCM with a ScriptProcessor. Works over HTTP because it does not
+        // use getUserMedia, which requires a secure context.
+        function decodeAudioViaElement(file) {
+            return new Promise((resolve, reject) => {
+                const actx = new (window.AudioContext || window.webkitAudioContext)();
+                const audio = document.createElement('audio');
+                audio.crossOrigin = 'anonymous';
+                audio.preload = 'auto';
+                audio.style.display = 'none';
+                document.body.appendChild(audio);
+                const url = URL.createObjectURL(file);
+                audio.src = url;
+                audio.load();
+                const source = actx.createMediaElementSource(audio);
+                const processor = actx.createScriptProcessor(4096, 1, 1);
+                const gain = actx.createGain();
+                gain.gain.value = 0;
+                const buffers = [];
+                let duration = 0;
+                let ended = false;
+                let started = false;
+                let startTimer = null;
+
+                processor.onaudioprocess = function(e) {
+                    if (ended) return;
+                    const input = e.inputBuffer.getChannelData(0);
+                    const copy = new Float32Array(input.length);
+                    copy.set(input);
+                    buffers.push(copy);
+                };
+
+                function startPlayback() {
+                    if (started) return;
+                    started = true;
+                    clearTimeout(startTimer);
+                    duration = audio.duration || 0;
+                    audio.play().catch(reject);
+                }
+
+                audio.addEventListener('loadedmetadata', () => {
+                    duration = audio.duration || 0;
+                }, { once: true });
+
+                audio.addEventListener('ended', () => {
+                    ended = true;
+                    clearTimeout(startTimer);
+                    clearTimeout(fallbackTimer);
+                    // Give the last buffer time to flush
+                    setTimeout(() => {
+                        let total = 0;
+                        for (const b of buffers) total += b.length;
+                        const merged = new Float32Array(total);
+                        let offset = 0;
+                        for (const b of buffers) { merged.set(b, offset); offset += b.length; }
+                        const expectedSamples = Math.floor(duration * actx.sampleRate);
+                        const trimmed = merged.slice(0, Math.min(expectedSamples, merged.length));
+                        const result = { float32: trimmed, sampleRate: actx.sampleRate };
+                        actx.close().then(() => {
+                            if (audio.parentNode) audio.parentNode.removeChild(audio);
+                            URL.revokeObjectURL(url);
+                            resolve(result);
+                        }).catch(() => {
+                            if (audio.parentNode) audio.parentNode.removeChild(audio);
+                            URL.revokeObjectURL(url);
+                            resolve(result);
+                        });
+                    }, 100);
+                }, { once: true });
+
+                audio.addEventListener('error', () => {
+                    ended = true;
+                    clearTimeout(startTimer);
+                    clearTimeout(fallbackTimer);
+                    actx.close().then(() => {
+                        if (audio.parentNode) audio.parentNode.removeChild(audio);
+                        URL.revokeObjectURL(url);
+                        reject(new Error('Audio element could not play file'));
+                    }).catch(() => {
+                        if (audio.parentNode) audio.parentNode.removeChild(audio);
+                        URL.revokeObjectURL(url);
+                        reject(new Error('Audio element could not play file'));
+                    });
+                }, { once: true });
+
+                source.connect(processor);
+                processor.connect(gain);
+                gain.connect(actx.destination);
+
+                // Resume AudioContext immediately inside the user gesture.
+                // Playback will start once the audio element reports it can play.
+                actx.resume().catch(reject);
+
+                audio.addEventListener('canplaythrough', startPlayback, { once: true });
+                audio.addEventListener('canplay', startPlayback, { once: true });
+                startTimer = setTimeout(() => {
+                    if (!started) startPlayback();
+                }, 1500);
+
+                const fallbackTimer = setTimeout(() => {
+                    if (!ended) {
+                        ended = true;
+                        actx.close();
+                        if (audio.parentNode) audio.parentNode.removeChild(audio);
+                        URL.revokeObjectURL(url);
+                        reject(new Error('Audio element playback did not end in time'));
+                    }
+                }, 10000);
+            });
+        }
+
+        function isIosContainer(name, type) {
+            const n = (name || '').toLowerCase();
+            const t = (type || '').toLowerCase();
+            return (
+                n.endsWith('.m4a') || n.endsWith('.caf') || n.endsWith('.mp4') ||
+                n.endsWith('.mov') || n.endsWith('.aac') ||
+                t.includes('audio/mp4') || t.includes('audio/x-m4a') ||
+                t.includes('audio/x-caf') || t.includes('audio/aac') ||
+                t.includes('video/mp4')
+            );
+        }
+
+        function withTimeout(p, ms) {
+            return new Promise((resolve, reject) => {
+                const t = setTimeout(() => reject(new Error('Decode timed out')), ms);
+                p.then((v) => { clearTimeout(t); resolve(v); }, (e) => { clearTimeout(t); reject(e); });
+            });
+        }
+
+        // Mobile upload: decode any audio format to PCM WAV before sending
+        async function handleMobileVoiceUpload(input) {
+            if (!input.files || input.files.length === 0) return;
+            const file = input.files[0];
+            const box = document.getElementById('voiceStatusBox');
+            box.innerText = '⏳ Converting mobile audio to WAV...';
+            box.style.color = '#38bdf8';
+
+            async function encodeAndSend(float32, sampleRate) {
+                const pcm16 = downsampleToInt16(float32, sampleRate, TARGET_SAMPLE_RATE);
+                const wavBlob = buildWavBlob(pcm16, TARGET_SAMPLE_RATE);
+                console.log(`[Voice] Mobile WAV: ${pcm16.length} samples, ${wavBlob.size} bytes, ${sampleRate}Hz -> ${TARGET_SAMPLE_RATE}Hz`);
+                sendVoiceBlob(wavBlob);
+            }
+
+            try {
+                if (isIosContainer(file.name, file.type)) {
+                    throw new Error('Use audio element for iOS container');
+                }
+                const arrayBuf = await file.arrayBuffer();
+                const actx = new (window.AudioContext || window.webkitAudioContext)();
+                const audioBuf = await withTimeout(actx.decodeAudioData(arrayBuf), 2000);
+                let float32;
+                if (audioBuf.numberOfChannels >= 2) {
+                    const ch0 = audioBuf.getChannelData(0);
+                    const ch1 = audioBuf.getChannelData(1);
+                    float32 = new Float32Array(ch0.length);
+                    for (let i = 0; i < ch0.length; i++) float32[i] = (ch0[i] + ch1[i]) / 2;
+                } else {
+                    float32 = audioBuf.getChannelData(0);
+                }
+                actx.close();
+                await encodeAndSend(float32, audioBuf.sampleRate);
+            } catch (err) {
+                console.warn("decodeAudioData failed, trying audio element fallback:", err);
+                try {
+                    const { float32, sampleRate } = await decodeAudioViaElement(file);
+                    await encodeAndSend(float32, sampleRate);
+                } catch (err2) {
+                    console.error("Mobile audio decode error:", err2);
+                    box.innerText = '❌ Could not decode audio file.';
+                    box.style.color = '#ef4444';
+                    resetVoiceBtn();
+                }
+            }
+            input.value = '';
+        }
+
+        async function sendVoiceBlob(blob) {
+            const box = document.getElementById('voiceStatusBox');
+            try {
+                const formData = new FormData();
+                formData.append('audio', blob, 'voice.wav');
+
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+                const response = await fetch('/api/voice_intercom', {
+                    method: 'POST',
+                    body: formData,
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                if (response.ok) {
+                    box.innerText = '✅ Voice Memo Played on Clock!';
+                    box.style.color = '#22c55e';
+                    showToast("Voice Message Played!");
+                    setTimeout(() => {
+                        if (box.innerText.includes('Played')) {
+                            box.innerText = 'Status: Ready to talk';
+                            box.style.color = 'var(--text-secondary)';
+                        }
+                    }, 4000);
+                } else {
+                    box.innerText = '❌ Upload error (HTTP ' + response.status + ').';
+                    box.style.color = '#ef4444';
+                }
+            } catch (err) {
+                console.error("Upload error:", err);
+                box.innerText = '❌ Upload timed out or connection error.';
+                box.style.color = '#ef4444';
+            } finally {
+                resetVoiceBtn();
+            }
+        }
+
+        async function syncGCalNow() {
+            const badge = document.getElementById('gcalSyncBadge');
+            const eventEl = document.getElementById('liveGCalNextEvent');
+            if (badge) {
+                badge.innerText = '⏳ Syncing...';
+                badge.style.opacity = '0.7';
+            }
+            if (eventEl && (eventEl.innerText.startsWith('No event') || eventEl.innerText === 'No more events')) {
+                eventEl.innerText = 'Syncing latest events...';
+            }
+            try {
+                const response = await fetch('/api/gcal_sync', { method: 'POST' });
+                if (response.ok) {
+                    showToast("🗓️ Calendar Sync Triggered!");
+                    setTimeout(fetchSettings, 2000);
+                    setTimeout(fetchSettings, 5000);
+                    setTimeout(fetchSettings, 8000);
+                } else {
+                    showToast("Sync request failed.");
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Connection Error.");
+            } finally {
+                setTimeout(() => {
+                    if (badge) {
+                        badge.innerText = '🔄 Sync Calendar';
+                        badge.style.opacity = '1';
+                    }
+                }, 6000);
+            }
+        }
+
+        // Fetch School Calendar
+        function fetchSchoolCalendar() {
+            fetch('/api/school_calendar?t=' + Date.now(), { cache: 'no-store' })
+                .then(r => r.json())
+                .then(data => {
+                    const el = document.getElementById('schoolCalendarList');
+                    if (!data || data.length === 0) {
+                        el.innerHTML = "<em>No upcoming school days off.</em>";
+                        return;
+                    }
+                    let html = '<ul style="margin:0; padding-left:1.2rem;">';
+                    data.slice(0, 5).forEach(item => {
+                        html += `<li><strong>${item.date}</strong>: ${item.name}</li>`;
+                    });
+                    html += '</ul>';
+                    el.innerHTML = html;
+                })
+                .catch(() => {
+                    document.getElementById('schoolCalendarList').innerHTML = "<em>DCPS Calendar linked.</em>";
+                });
+        }
+
+        // Countdown Timer Methods
+        async function startTimer(mins) {
+            try {
+                const response = await fetch('/api/timer/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ minutes: mins })
+                });
+                if (response.ok) {
+                    showToast("⏱️ " + mins + "m Timer Started!");
+                    fetchSettings();
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Error starting timer");
+            }
+        }
+
+        async function startCustomTimer() {
+            const el = document.getElementById('customTimerMin');
+            const mins = parseInt(el ? el.value : '15', 10);
+            if (isNaN(mins) || mins <= 0) {
+                showToast("Please enter valid minutes");
+                return;
+            }
+            startTimer(mins);
+        }
+
+        async function testTimerSound() {
+            try {
+                const response = await fetch('/api/timer/test_sound', { method: 'POST' });
+                if (response.ok) {
+                    showToast("🔔 Playing Timer Chime...");
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Error testing chime");
+            }
+        }
+
+        async function stopTimer() {
+            try {
+                const response = await fetch('/api/timer/stop', { method: 'POST' });
+                if (response.ok) {
+                    showToast("⏱️ Timer Stopped");
+                    fetchSettings();
+                }
+            } catch (err) {
+                console.error(err);
+                showToast("Error stopping timer");
+            }
+        }
+
+        // Initialize page
+        window.addEventListener('load', () => {
+            renderAffirmationInputs();
+            fetchSettings();
+            fetchSchoolCalendar();
+            setInterval(() => {
+                if (!document.hidden) {
+                    fetchSettings();
+                }
+            }, 5000);
+            
+            const savedTab = localStorage.getItem('activeTab');
+            if (savedTab) switchTab(savedTab);
+        });
+    </script>
+</body>
+</html>

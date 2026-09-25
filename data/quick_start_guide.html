@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start Guide - Smart Alarm Clock</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            min-height: 100%;
+            background-color: #0b0f19;
+            background-image: 
+                radial-gradient(at 10% 20%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(98, 0, 234, 0.08) 0px, transparent 50%);
+            color: #f8fafc;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 800px;
+            background: #0f172a;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.15);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 2px solid rgba(56, 189, 248, 0.35);
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px dashed rgba(56, 189, 248, 0.3);
+            padding-bottom: 10px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            background: linear-gradient(135deg, #ffffff 30%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 13.5px;
+            color: #94a3b8;
+            margin-top: 3px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .grid-6 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            flex-grow: 1;
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            backdrop-filter: blur(8px);
+        }
+
+        .card-title {
+            font-size: 16.5px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card ul {
+            list-style: none;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+
+        .card ul li {
+            margin-bottom: 5px;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .card ul li::before {
+            content: "•";
+            color: #38bdf8;
+            font-weight: bold;
+            font-size: 16px;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        .card ul li strong {
+            color: #ffffff;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid #38bdf8;
+            color: #38bdf8;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 1px 7px;
+            border-radius: 7px;
+            margin-right: 2px;
+        }
+
+        .screen-preview {
+            background: #020617;
+            color: #00f2fe;
+            font-family: 'Courier New', monospace;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            line-height: 1.35;
+            height: 46px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            text-align: center;
+            box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.15);
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        /* Bottom Section: Dial Screens & Dashboard */
+        .bottom-section {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+
+        .bottom-title {
+            font-size: 16.5px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 7px;
+        }
+
+        .screens-flex {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .screen-box {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 7px;
+            padding: 8px 10px;
+            font-size: 11.5px;
+            color: #cbd5e1;
+            line-height: 1.35;
+        }
+
+        .screen-box strong {
+            color: #38bdf8;
+            display: block;
+            margin-bottom: 3px;
+            font-size: 12px;
+        }
+
+        .dash-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(98, 0, 234, 0.2) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: #ffffff;
+            border-radius: 7px;
+            padding: 7px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+        }
+
+        .dash-bar code {
+            background: rgba(0, 0, 0, 0.4);
+            color: #38bdf8;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .key-row {
+            display: flex;
+            gap: 14px;
+            font-size: 11.5px;
+            color: #94a3b8;
+            margin-top: 8px;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .key-row strong {
+            color: #38bdf8;
+        }
+
+        footer {
+            text-align: center;
+            border-top: 1px dashed rgba(56, 189, 248, 0.3);
+            padding-top: 10px;
+            font-size: 14.5px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        footer strong {
+            color: #38bdf8;
+        }
+
+        /* Print formatting */
+        @media print {
+            body {
+                background: white;
+                color: #2c3e50;
+                padding: 0;
+            }
+            .page {
+                box-shadow: none;
+                background: white;
+                color: #2c3e50;
+                border: 3.5px solid #00a8ff;
+                width: 100%;
+                height: 100vh;
+            }
+            header h1 {
+                background: none;
+                -webkit-text-fill-color: #00a8ff;
+                color: #00a8ff;
+            }
+            .card {
+                background: #f4fbff;
+                border: 1.5px solid #cce7ff;
+            }
+            .card ul {
+                color: #34495e;
+            }
+            .card ul li strong {
+                color: #000000;
+            }
+            .badge {
+                background: #00a8ff;
+                color: white;
+            }
+            .bottom-section {
+                background: #eef7ff;
+                border: 1.5px solid #00a8ff;
+            }
+            .screen-box {
+                background: #ffffff;
+                border: 1.5px solid #cce7ff;
+                color: #2c3e50;
+            }
+            .dash-bar {
+                background: #00a8ff;
+                color: white;
+            }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 8px;
+                align-items: flex-start;
+                overflow-y: auto;
+                height: auto;
+            }
+            .page {
+                width: 100%;
+                height: auto;
+                min-height: auto;
+                padding: 1.5rem 1rem;
+                gap: 1.5rem;
+            }
+            .grid-6 {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .screens-flex {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .dash-bar {
+                flex-direction: column;
+                gap: 6px;
+                text-align: center;
+                padding: 10px;
+            }
+            .key-row {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+    <header>
+        <h1>✨ Your Smart Bedside Clock ✨</h1>
+        <p>Quick Start Guide & Cheat Sheet</p>
+    </header>
+
+    <!-- 6 TOP FEATURE CARDS -->
+    <div class="grid-6">
+        <!-- CARD 1 -->
+        <div class="card">
+            <div>
+                <div class="card-title">⏰ Alarms & Affirmations</div>
+                <ul>
+                    <li><strong>Gentle Fade-in:</strong> Alarm music fades in soft over 30s.</li>
+                    <li><strong>Single Click Knob:</strong> Instantly <span class="badge">Dismiss</span> alarm & see your morning affirmation! ❤️</li>
+                    <li><strong>Turn Knob:</strong> Select <span class="badge">Snooze</span> (5, 10, 15m), & click knob.</li>
+                </ul>
+            </div>
+            <div class="screen-preview">
+                <div>YOU ARE AMAZING! ❤️</div>
+                <div>[Push to Dismiss]</div>
+            </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="card">
+            <div>
+                <div class="card-title">⏱️ Bedside ADHD Timer</div>
+                <ul>
+                    <li><strong>Visual Progress Bar:</strong> Drains from right to left across 16 segments so you can "see" remaining time!</li>
+                    <li><strong>Quick Actions Dial:</strong> Single click knob $\rightarrow$ Select <span class="badge">Timer</span> (2, 5, 10, 15..60m) $\rightarrow$ Click!</li>
+                    <li><strong>Siren Chime Alert:</strong> Music ducks and siren sounds when reaching 00:00!</li>
+                </ul>
+            </div>
+            <div class="screen-preview">
+                <div>Timer 14:28 Left ⏳</div>
+                <div>[████████------]</div>
+            </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="card">
+            <div>
+                <div class="card-title">🗓️ Google Agenda & School</div>
+                <ul>
+                    <li><strong>Bedside Daily Agenda:</strong> Syncs your personal or family calendar and shows your next upcoming event!</li>
+                    <li><strong>DCPS Days Off:</strong> Auto-skips weekends, holidays, teacher days & breaks in <em>School</em> alarm mode.</li>
+                    <li><strong>Family Countdowns:</strong> Displays countdowns to trips, birthdays, or vacations!</li>
+                </ul>
+            </div>
+            <div class="screen-preview">
+                <div>2:30p Soccer Prac</div>
+                <div>Next: Piano (Thu)</div>
+            </div>
+        </div>
+
+        <!-- CARD 4 -->
+        <div class="card">
+            <div>
+                <div class="card-title">☀️ Sunrise Light Wakeup</div>
+                <ul>
+                    <li><strong>20 Mins Early:</strong> Bedroom lights turn on warm amber 20 mins before alarm & shift to daylight.</li>
+                    <li><strong>Early Cancel:</strong> Turn or push knob during sunrise fade to cancel today's sound alarm early!</li>
+                </ul>
+            </div>
+            <div class="screen-preview">
+                <div>06:40 AM  ☀️🔔</div>
+                <div>Cancel Alarm? [Push]</div>
+            </div>
+        </div>
+
+        <!-- CARD 5 -->
+        <div class="card">
+            <div>
+                <div class="card-title">🌙 Bedtime & Sleep Sounds</div>
+                <ul>
+                    <li><strong>1-Click Bedtime:</strong> Single-click dial $\rightarrow$ select <span class="badge">White Noise</span> for 0ms gapless soothing sounds!</li>
+                    <li><strong>Sleep Timer (zZ):</strong> Dims Hue lights to a 15% lavender glow and turns off music automatically.</li>
+                </ul>
+            </div>
+            <div class="screen-preview">
+                <div>07:30 AM  zZ🔔</div>
+                <div>* White Noise *</div>
+            </div>
+        </div>
+
+        <!-- CARD 6 -->
+        <div class="card">
+            <div>
+                <div class="card-title">🎵 Spotify & Parent Intercom</div>
+                <ul>
+                    <li><strong>Music Player:</strong> Track & artist scroll with 🎵 note. 2-Clicks = Next Track | Long Press = Settings.</li>
+                    <li><strong>Parent Intercom & Weather:</strong> Live parent intercom messages, rain timing, and severe storm alerts!</li>
+                </ul>
+            </div>
+            <div class="screen-preview">
+                <div>🎵 07:30 AM  ▶🔔</div>
+                <div>Cruel Summer - Taylor Swift</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM SECTION: DIAL SCREENS & DASHBOARD & ICONS -->
+    <div class="bottom-section">
+        <div class="bottom-title">🔄 Turn Knob to Explore Live Carousel Cards</div>
+        <div class="screens-flex">
+            <div class="screen-box">
+                <strong>Card 0: Clock</strong>
+                Time & Date / No School Alert
+            </div>
+            <div class="screen-box">
+                <strong>Card 1: Timer*</strong>
+                Live ADHD Countdown Bar
+            </div>
+            <div class="screen-box">
+                <strong>Card 2: Weather</strong>
+                Temp & Sky (<em>76°F Pt. Cloudy</em>)
+            </div>
+            <div class="screen-box">
+                <strong>Card 3: Tomorrow</strong>
+                High & RealFeel (<em>95° Fl 105°</em>)
+            </div>
+            <div class="screen-box">
+                <strong>Card 4: Rain / UV</strong>
+                Rain Timing or Peak UV
+            </div>
+            <div class="screen-box">
+                <strong>Card 5: Agenda</strong>
+                Google Calendar Events
+            </div>
+            <div class="screen-box">
+                <strong>Card 6: School</strong>
+                Next Day Off & Countdowns
+            </div>
+            <div class="screen-box">
+                <strong>Card 7: Bus</strong>
+                Live WMATA Arrivals (<em>8m, 36m</em>)
+            </div>
+        </div>
+
+        <div class="dash-bar">
+            <span>💻 Web Control Dashboard:</span>
+            <code>http://spotify-alarm.local</code>
+            <span>(Open on Phone / iPad / Laptop)</span>
+        </div>
+
+        <div class="key-row">
+            <span><strong>🔔</strong> Alarm Set</span>
+            <span><strong>⏳</strong> Bedside Timer</span>
+            <span><strong>zZ</strong> Sleep Timer</span>
+            <span><strong>☀️</strong> Sunrise Active</span>
+            <span><strong>❗</strong> Weather Alert</span>
+            <span><strong>🎵</strong> Spotify Playing</span>
+            <span><strong>❤️</strong> Affirmations</span>
+        </div>
+    </div>
+
+    <footer>
+        Built with ❤️ for Faye
+    </footer>
+</div>
+
+</body>
+</html>

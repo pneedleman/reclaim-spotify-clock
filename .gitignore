@@ -1,0 +1,11 @@
+# PlatformIO build outputs
+.pio/
+.vscode/
+
+# Secrets
+src/secrets.h
+
+# macOS system files
+.DS_Store
+*.jpg
+*.png
