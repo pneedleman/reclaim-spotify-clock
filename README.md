@@ -6,13 +6,11 @@ A distraction-free ESP32-S3 smart bedside clock built for kids and teens. Featur
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
 <p align="center">
-  <img src="https://substackcdn.com/image/fetch/$s_!8DPp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F74166ac9-4332-4ac8-b34e-ea83268baedb_5354x3568.jpeg" alt="Reclaim Spotify Bedside Clock" width="700" />
+  <img src="https://substackcdn.com/image/fetch/$s_!8DPp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F74166ac9-4332-4ac8-b34e-ea83268baedb_5354x3568.jpeg" alt="Reclaim Spotify Bedside Clock"  />
 </p>
 
 ---
 
-[https://substackcdn.com/image/fetch/$s_!8DPp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F74166ac9-4332-4ac8-b34e-ea83268baedb_5354x3568.jpeg]
----
 
 ## 🌟 Story & Overview
 
