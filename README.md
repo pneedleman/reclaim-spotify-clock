@@ -3,7 +3,7 @@
 A distraction-free ESP32-S3 smart bedside clock built for kids and teens. Features physical rotary controls, Spotify Connect streaming, gradual sunrise lighting via Philips Hue, local weather, and school calendar sync—**with 100% zero microphones, cameras, or ad screens**.
 
 [![Reclaim The Day Project Page](https://img.shields.io/badge/Project_Story_%26_Parts_List-reclaimthe.day%2Fspotify--clock-D38865?style=for-the-badge)](https://reclaimthe.day/spotify-clock)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-lightgrey.svg?style=for-the-badge)](LICENSE)
 
 <p align="center">
   <img src="https://substackcdn.com/image/fetch/$s_!8DPp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F74166ac9-4332-4ac8-b34e-ea83268baedb_5354x3568.jpeg" alt="Reclaim Spotify Bedside Clock"  />
@@ -21,7 +21,7 @@ This project offers a **sane alternative**:
 - **Blue LCD (16x2)**: Retro-blue backlight that automatically dims at night. 
 - **Privacy by Design**:  No microphones or cameras.
 - **Hue Integration**: Slowly ramps up soft amber light on bedroom light before the alarm rings.
-- **Spotify**:Connect to Spotify as a music controller and see the Artist and track scroll on the screen.
+- **Spotify**: Connect to Spotify as a music controller and see the Artist and track scroll on the screen.
 - **Weather & Calendar**: Displays Current and Upcoming Weather (+Alerts) and integrate custom ICS Calendars. 
 - **School Calendar Aware**: Automatically suppresses alarms on teacher workdays, holidays, and snow delays.
 
@@ -141,6 +141,6 @@ Access the local web dashboard from any browser on your home network at `http://
 
 ## 📄 License & Acknowledgments
 
-Distributed under the **MIT License**. See `LICENSE` for more information.
+Distributed under the **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** License. See [LICENSE](LICENSE) for details. Non-commercial personal builds, home use, and tinkering are warmly welcomed; commercial distribution, manufacturing, and sales are prohibited without prior written permission.
 
 Created by Paul Needleman & daughter at [Reclaim The Day](https://reclaimthe.day). Special thanks to the open-source community behind `ESP32-audioI2S`, `LiquidCrystal_I2C`, `Adafruit Seesaw`, and `ArduinoJson`.
